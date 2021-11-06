@@ -1,0 +1,35 @@
+<idea-plugin>
+    <id>co.anbora.labs.todo.export</id>
+    <name>TODO Exporter</name>
+    <vendor email="anboralabs@gmail.com" url="https://labs.anbora.co">Anbora labs</vendor>
+
+    <description><![CDATA[
+        TODO Exporter is a plugin for exporting todo comments in a file
+    ]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <projectService serviceImplementation="co.anbora.labs.todo.TodoView"/>
+        <projectService serviceImplementation="co.anbora.labs.todo.TodoViewChangesSupport" />
+        <projectService serviceImplementation="co.anbora.labs.todo.nodes.TodoTreeHelper"/>
+
+        <toolWindow id="TODO Exporter" anchor="bottom" icon="AllIcons.Toolwindows.ToolWindowTodo"
+                    factoryClass="co.anbora.labs.todo.TodoToolWindowFactory" canCloseContents="true"/>
+    </extensions>
+
+    <actions>
+        <group id="TodoExporterMainGroup">
+            <add-to-group group-id="Other.KeymapGroup"/>
+            <group id="TodoExporterViewGroupByGroup" class="co.anbora.labs.todo.TodoPanel$GroupByActionGroup" icon="AllIcons.Actions.GroupBy"
+                   popup="true">
+                <separator text="Group By"/>
+                <action class="co.anbora.labs.todo.TodoPanel$MyShowModulesAction" id="TodoExporterViewGroupByShowModules"/>
+                <action class="co.anbora.labs.todo.TodoPanel$MyShowPackagesAction" id="TodoExporterViewGroupByShowPackages"/>
+                <action class="co.anbora.labs.todo.TodoPanel$MyFlattenPackagesAction" id="TodoExporterViewGroupByFlattenPackage"/>
+            </group>
+        </group>
+    </actions>
+</idea-plugin>

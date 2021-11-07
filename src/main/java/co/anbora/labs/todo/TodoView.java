@@ -202,8 +202,8 @@ public class TodoView implements PersistentStateComponent<TodoView.State>, Dispo
     myContentManager = toolWindow.getContentManager();
 
     myContentManager.addContent(allTodosContent);
-    myContentManager.addContent(currentFileTodosContent);
-    myContentManager.addContent(scopeBasedTodoContent);
+    //myContentManager.addContent(currentFileTodosContent);
+    //myContentManager.addContent(scopeBasedTodoContent);
 
     if (myChangesSupport.isContentVisible(myProject)) {
       myChangesListener.setVisible(true);

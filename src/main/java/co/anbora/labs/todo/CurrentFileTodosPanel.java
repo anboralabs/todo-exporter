@@ -27,7 +27,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.ui.content.Content;
 import org.jetbrains.annotations.NotNull;
 
-abstract class CurrentFileTodosPanel extends TodoPanel {
+/*abstract class CurrentFileTodosPanel extends TodoPanel {
   CurrentFileTodosPanel(Project project, TodoPanelSettings settings, Content content) {
     super(project, settings, true, content);
 
@@ -64,4 +64,4 @@ abstract class CurrentFileTodosPanel extends TodoPanel {
       }
     }
   }
-}
+}*/

@@ -177,7 +177,7 @@ public abstract class TodoPanel extends SimpleToolWindowPanel implements Occuren
     group.add(CommonActionsManager.getInstance().createCollapseAllAction(myTreeExpander, this));
     group.addSeparator();
     group.add(ActionManager.getInstance().getAction(IdeActions.GROUP_VERSION_CONTROLS));
-    PopupHandler.installPopupMenu(myTree, group, ActionPlaces.TODO_VIEW_POPUP);
+    //PopupHandler.installPopupMenu(myTree, group, ActionPlaces.TODO_VIEW_POPUP);
 
     myUsagePreviewPanel = new UsagePreviewPanel(myProject, FindInProjectUtil.setupViewPresentation(false, new FindModel()));
     Disposer.register(this, myUsagePreviewPanel);
@@ -394,7 +394,7 @@ public abstract class TodoPanel extends SimpleToolWindowPanel implements Occuren
     else if (TODO_PANEL_DATA_KEY.is(dataId)) {
       return this;
     }
-    else if (PlatformDataKeys.SLOW_DATA_PROVIDERS.is(dataId)) {
+    /*else if (PlatformDataKeys.SLOW_DATA_PROVIDERS.is(dataId)) {
       TreePath path = myTree.getSelectionPath();
       if (path == null) {
         return null;
@@ -404,7 +404,7 @@ public abstract class TodoPanel extends SimpleToolWindowPanel implements Occuren
         return null;
       }
       return List.of((DataProvider)realDataId -> getSlowData(realDataId, (NodeDescriptor)userObject));
-    }
+    }*/
     return super.getData(dataId);
   }
 

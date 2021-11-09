@@ -32,5 +32,5 @@ publishPlugin {
 patchPluginXml {
     changeNotes = file("src/main/html/change-notes.html").getText().toString()
     pluginDescription = file("src/main/html/description.html").getText().toString()
-    sinceBuild = '192'
+    sinceBuild = '203'
 }

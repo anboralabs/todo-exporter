@@ -26,7 +26,7 @@ git clone https://github.com/anboralabs/todo-exporter
 
 ```
 - Go to https://github.com/anboralabs/todo-exporter/releases/tag/v1.0
-- download firebase-syntax-highlighting-1.0-SNAPSHOT.jar
+- download todo.export-1.0-SNAPSHOT.jar
 - Plugins -> Install From disk -> choose the file downloaded
 ```
 
@@ -36,7 +36,7 @@ git clone https://github.com/anboralabs/todo-exporter
 
 - Plugin url
 
-  [Plugin Download](https://plugins.jetbrains.com/plugin/15189-firebase-rules-syntax-highlighter)
+  [Plugin Download](https://plugins.jetbrains.com/plugin/17983-todo-exporter)
 
 ## Credits
 

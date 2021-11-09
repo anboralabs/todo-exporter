@@ -3,16 +3,12 @@
     <name>TODO Exporter</name>
     <vendor email="anboralabs@gmail.com" url="https://labs.anbora.co">Anbora labs</vendor>
 
-    <description><![CDATA[
-        TODO Exporter is a plugin for exporting todo comments in a file
-    ]]></description>
-
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <projectService serviceImplementation="co.anbora.labs.todo.TodoView"/>
+        <projectService serviceImplementation="co.anbora.labs.todo.TodoExporterView"/>
         <projectService serviceImplementation="co.anbora.labs.todo.TodoViewChangesSupport" />
         <projectService serviceImplementation="co.anbora.labs.todo.nodes.TodoTreeHelper"/>
 

@@ -43,8 +43,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 
-@State(name = "TodoView", storages = @Storage(StoragePathMacros.PRODUCT_WORKSPACE_FILE))
-public class TodoView implements PersistentStateComponent<TodoView.State>, Disposable {
+@State(name = "TodoExporterView", storages = @Storage(StoragePathMacros.PRODUCT_WORKSPACE_FILE))
+public class TodoExporterView implements PersistentStateComponent<TodoExporterView.State>, Disposable {
   private final Project myProject;
 
   private ContentManager myContentManager;
@@ -62,7 +62,7 @@ public class TodoView implements PersistentStateComponent<TodoView.State>, Dispo
   private final TodoViewChangesSupport.Listener myChangesListener;
   private Content myChangeListTodosContent;
 
-  public TodoView(@NotNull Project project) {
+  public TodoExporterView(@NotNull Project project) {
     myProject = project;
 
     state.all.arePackagesShown = true;

@@ -29,7 +29,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public final class TodoItemNode extends BaseToDoNode<SmartTodoItemPointer> implements HighlightedRegionProvider {
+/*public final class TodoItemNode extends BaseToDoNode<SmartTodoItemPointer> implements HighlightedRegionProvider {
   private static final Logger LOG = Logger.getInstance(TodoItem.class);
 
   private final List<HighlightedRegion> myHighlightedRegions;
@@ -218,4 +218,4 @@ public final class TodoItemNode extends BaseToDoNode<SmartTodoItemPointer> imple
       return myText;
     }
   }
-}
+}*/

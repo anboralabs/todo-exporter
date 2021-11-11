@@ -1,4 +1,5 @@
-// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by
+// the Apache 2.0 license that can be found in the LICENSE file.
 package co.anbora.labs.todo.ide.util;
 
 import com.intellij.CommonBundle;
@@ -30,11 +31,6 @@ import com.intellij.util.PathUtil;
 import com.intellij.util.concurrency.annotations.RequiresEdt;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
@@ -43,12 +39,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.TooManyListenersException;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import org.jetbrains.annotations.NotNull;
 
 public final class ExportToFileUtil {
   private static final Logger LOG = Logger.getInstance(ExportToFileUtil.class);
 
   @RequiresEdt
-  public static void chooseFileAndExport(@NotNull Project project, @NotNull ExporterToTextFile exporter) {
+  public static void chooseFileAndExport(@NotNull Project project,
+                                         @NotNull ExporterToTextFile exporter) {
     final ExportDialogBase dlg = new ExportDialogBase(project, exporter);
 
     if (!dlg.showAndGet()) {
@@ -59,19 +60,18 @@ public final class ExportToFileUtil {
     exporter.exportedTo(dlg.getFileName());
   }
 
-  private static void exportTextToFile(Project project, String fileName, String textToExport) {
+  private static void exportTextToFile(Project project, String fileName,
+                                       String textToExport) {
     boolean append = false;
     File file = new File(fileName);
     if (file.exists()) {
       int result = Messages.showYesNoCancelDialog(
-        project,
-        IdeBundle.message("error.text.file.already.exists", fileName),
-        IdeBundle.message("dialog.title.export.to.file"),
-        IdeBundle.message("action.overwrite"),
-        IdeBundle.message("action.append"),
-        CommonBundle.getCancelButtonText(),
-        Messages.getWarningIcon()
-      );
+          project,
+          IdeBundle.message("error.text.file.already.exists", fileName),
+          IdeBundle.message("dialog.title.export.to.file"),
+          IdeBundle.message("action.overwrite"),
+          IdeBundle.message("action.append"),
+          CommonBundle.getCancelButtonText(), Messages.getWarningIcon());
 
       if (result != Messages.NO && result != Messages.YES) {
         return;
@@ -81,16 +81,13 @@ public final class ExportToFileUtil {
       }
     }
 
-    try (FileWriter writer = new FileWriter(fileName, StandardCharsets.UTF_8, append)) {
+    try (FileWriter writer =
+             new FileWriter(fileName, StandardCharsets.UTF_8, append)) {
       writer.write(textToExport);
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       Messages.showMessageDialog(
-        project,
-        IdeBundle.message("error.writing.to.file", fileName),
-        CommonBundle.getErrorTitle(),
-        Messages.getErrorIcon()
-      );
+          project, IdeBundle.message("error.writing.to.file", fileName),
+          CommonBundle.getErrorTitle(), Messages.getErrorIcon());
     }
   }
 
@@ -107,13 +104,17 @@ public final class ExportToFileUtil {
       myExporter = exporter;
 
       myTfFile = new TextFieldWithBrowseButton();
-      myTfFile.addBrowseFolderListener(new TextBrowseFolderListener(FileChooserDescriptorFactory.createSingleFileOrFolderDescriptor(), myProject) {
+      myTfFile.addBrowseFolderListener(new TextBrowseFolderListener(
+          FileChooserDescriptorFactory.createSingleFileOrFolderDescriptor(),
+          myProject) {
         @NotNull
         @Override
-        protected String chosenFileToResultingText(@NotNull VirtualFile chosenFile) {
+        protected String chosenFileToResultingText(
+            @NotNull VirtualFile chosenFile) {
           String res = super.chosenFileToResultingText(chosenFile);
           if (chosenFile.isDirectory()) {
-            res += File.separator + PathUtil.getFileName(myExporter.getDefaultFilePath());
+            res += File.separator +
+                   PathUtil.getFileName(myExporter.getDefaultFilePath());
           }
           return res;
         }
@@ -130,8 +131,7 @@ public final class ExportToFileUtil {
           }
         };
         myExporter.addSettingsChangedListener(myListener);
-      }
-      catch (TooManyListenersException e) {
+      } catch (TooManyListenersException e) {
         LOG.error(e);
       }
       initText();
@@ -150,10 +150,12 @@ public final class ExportToFileUtil {
 
     @Override
     protected JComponent createCenterPanel() {
-      final Document document = ((EditorFactoryImpl)EditorFactory.getInstance()).createDocument(true);
+      final Document document =
+          ((EditorFactoryImpl)EditorFactory.getInstance()).createDocument(true);
       ((DocumentImpl)document).setAcceptSlashR(true);
 
-      myTextArea = EditorFactory.getInstance().createEditor(document, myProject, FileTypes.PLAIN_TEXT, true);
+      myTextArea = EditorFactory.getInstance().createEditor(
+          document, myProject, FileTypes.PLAIN_TEXT, true);
       final EditorSettings settings = myTextArea.getSettings();
       settings.setLineNumbersShown(false);
       settings.setLineMarkerAreaShown(false);
@@ -165,7 +167,8 @@ public final class ExportToFileUtil {
 
       EditorEx editorEx = (EditorEx)myTextArea;
       editorEx.setBackgroundColor(UIUtil.getInactiveTextFieldBackgroundColor());
-      editorEx.setColorsScheme(EditorColorsManager.getInstance().getSchemeForCurrentUITheme());
+      editorEx.setColorsScheme(
+          EditorColorsManager.getInstance().getSchemeForCurrentUITheme());
 
       myTextArea.getComponent().setPreferredSize(new Dimension(700, 400));
       return myTextArea.getComponent();
@@ -189,7 +192,8 @@ public final class ExportToFileUtil {
       panel.setLayout(new GridBagLayout());
       GridBagConstraints gbConstraints = new GridBagConstraints();
       gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-      JLabel promptLabel = new JLabel(IdeBundle.message("editbox.export.to.file"));
+      JLabel promptLabel =
+          new JLabel(IdeBundle.message("editbox.export.to.file"));
       gbConstraints.weightx = 0;
       panel.add(promptLabel, gbConstraints);
       gbConstraints.weightx = 1;
@@ -197,7 +201,8 @@ public final class ExportToFileUtil {
 
       String defaultFilePath = myExporter.getDefaultFilePath();
       if (!new File(defaultFilePath).isAbsolute()) {
-        defaultFilePath = PathMacroManager.getInstance(myProject).collapsePath(defaultFilePath);
+        defaultFilePath = PathMacroManager.getInstance(myProject).collapsePath(
+            defaultFilePath);
       }
       myTfFile.setText(FileUtil.toSystemDependentName(defaultFilePath));
 
@@ -206,21 +211,16 @@ public final class ExportToFileUtil {
       return panel;
     }
 
-    public String getText() {
-      return myTextArea.getDocument().getText();
-    }
+    public String getText() { return myTextArea.getDocument().getText(); }
 
-    public void setFileName(@NlsSafe String s) {
-      myTfFile.setText(s);
-    }
+    public void setFileName(@NlsSafe String s) { myTfFile.setText(s); }
 
-    public String getFileName() {
-      return myTfFile.getText();
-    }
+    public String getFileName() { return myTfFile.getText(); }
 
     @Override
-    protected Action @NotNull [] createActions() {
-      return new Action[]{getOKAction(), new CopyToClipboardAction(), getCancelAction()};
+    protected Action @NotNull[] createActions() {
+      return new Action[] {getOKAction(), new CopyToClipboardAction(),
+                           getCancelAction()};
     }
 
     @Override
@@ -231,7 +231,8 @@ public final class ExportToFileUtil {
     protected class CopyToClipboardAction extends AbstractAction {
       public CopyToClipboardAction() {
         super(IdeBundle.message("button.copy"));
-        putValue(Action.SHORT_DESCRIPTION, IdeBundle.message("description.copy.text.to.clipboard"));
+        putValue(Action.SHORT_DESCRIPTION,
+                 IdeBundle.message("description.copy.text.to.clipboard"));
       }
 
       @Override

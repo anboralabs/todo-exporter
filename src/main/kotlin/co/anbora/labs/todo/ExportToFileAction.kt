@@ -1,6 +1,7 @@
 package co.anbora.labs.todo
 
 import co.anbora.labs.todo.exporter.ExporterTodoToString
+import co.anbora.labs.todo.ide.util.ExportToFileUtil
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.ide.IdeBundle
 import com.intellij.icons.AllIcons
@@ -11,7 +12,6 @@ import com.intellij.psi.search.TodoItem
 import com.intellij.psi.PsiDocumentManager
 import co.anbora.labs.todo.nodes.TodoExportItemNode
 import com.intellij.ide.ExporterToTextFile
-import com.intellij.ide.util.ExportToFileUtil
 import com.intellij.openapi.project.Project
 import java.util.function.Supplier
 

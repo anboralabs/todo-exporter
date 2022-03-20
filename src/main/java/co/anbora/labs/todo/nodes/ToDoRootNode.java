@@ -7,7 +7,9 @@ import co.anbora.labs.todo.ToDoSummary;
 import co.anbora.labs.todo.TodoTreeBuilder;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Queryable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +42,7 @@ public class ToDoRootNode extends BaseToDoNode<Object> {
   }
 
   @Override
-  public String getTestPresentation() {
+  public @Nullable String toTestString(Queryable.@Nullable PrintInfo printInfo) {
     return "Root";
   }
 

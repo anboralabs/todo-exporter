@@ -14,9 +14,11 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.ui.Queryable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -90,7 +92,7 @@ public class SummaryNode extends BaseToDoNode<ToDoSummary> {
   }
 
   @Override
-  public String getTestPresentation() {
+  public @Nullable String toTestString(Queryable.@Nullable PrintInfo printInfo) {
     return "Summary";
   }
 

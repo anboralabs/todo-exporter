@@ -8,6 +8,7 @@ import com.intellij.ide.util.treeView.AbstractTreeNode
 import com.intellij.openapi.editor.RangeMarker
 import com.intellij.openapi.editor.highlighter.EditorHighlighter
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.Queryable
 import com.intellij.openapi.util.Comparing
 import com.intellij.openapi.util.TextRange
 import com.intellij.ui.HighlightedRegion
@@ -157,7 +158,7 @@ open class TodoItemNode(
         }
     }
 
-    override fun getTestPresentation(): String {
+    override fun toTestString(printInfo: Queryable.PrintInfo?): String? {
         return "Item: " + getValue().todoItem.textRange
     }
 

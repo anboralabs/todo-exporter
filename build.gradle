@@ -1,17 +1,17 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
-    id 'org.jetbrains.intellij' version '1.4.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.20'
+    id 'org.jetbrains.intellij' version '1.5.2'
 }
 
 group 'co.anbora.labs'
-version '1.2'
+version '1.2.1'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.20"
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/

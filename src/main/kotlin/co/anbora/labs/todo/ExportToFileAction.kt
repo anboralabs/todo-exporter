@@ -20,7 +20,7 @@ class ExportToFileAction(
     private val supplierBuilder: Supplier<TodoTreeBuilder>
 ): AnAction(IdeBundle.message("dialog.title.export.to.file"), null, AllIcons.ToolbarDecorator.Export) {
 
-    private val mySearchHelper: PsiTodoSearchHelper = PsiTodoSearchHelper.SERVICE.getInstance(myProject)
+    private val mySearchHelper: PsiTodoSearchHelper = PsiTodoSearchHelper.getInstance(myProject)
 
     override fun actionPerformed(e: AnActionEvent) {
         val dataContext = e.dataContext

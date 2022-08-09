@@ -101,7 +101,7 @@ public abstract class TodoTreeBuilder implements Disposable {
     myFile2Highlighter = ContainerUtil.createConcurrentSoftValueMap(); //used from EDT and from StructureTreeModel invoker thread
 
     PsiManager psiManager = PsiManager.getInstance(myProject);
-    mySearchHelper = PsiTodoSearchHelper.SERVICE.getInstance(myProject);
+    mySearchHelper = PsiTodoSearchHelper.getInstance(myProject);
     psiManager.addPsiTreeChangeListener(new MyPsiTreeChangeListener(), this);
 
     myFileStatusListener = new MyFileStatusListener();

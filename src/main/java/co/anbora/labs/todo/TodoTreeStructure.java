@@ -56,7 +56,7 @@ public abstract class TodoTreeStructure extends AbstractTreeStructureBase implem
     super(project);
     myArePackagesShown=true;
     mySummaryElement=new ToDoSummary();
-    mySearchHelper= PsiTodoSearchHelper.SERVICE.getInstance(project);
+    mySearchHelper= PsiTodoSearchHelper.getInstance(project);
   }
 
   final void setTreeBuilder(TodoTreeBuilder builder){

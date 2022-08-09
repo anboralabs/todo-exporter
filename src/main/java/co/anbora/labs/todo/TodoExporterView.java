@@ -145,7 +145,7 @@ public class TodoExporterView implements PersistentStateComponent<TodoExporterVi
 
   public void initToolWindow(@NotNull ToolWindow toolWindow) {
     // Create panels
-    ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+    ContentFactory contentFactory = ContentFactory.getInstance();
     Content allTodosContent = contentFactory.createContent(null, IdeUICustomization.getInstance().projectMessage("tab.title.project"), false);
     toolWindow.setHelpId("find.todoList");
     myAllTodos = new TodoPanel(myProject, state.all, false, allTodosContent) {
@@ -297,7 +297,7 @@ public class TodoExporterView implements PersistentStateComponent<TodoExporterVi
   }
 
   public void addCustomTodoView(final TodoTreeBuilderFactory factory, @NlsContexts.TabTitle final String title, final TodoPanelSettings settings) {
-    Content content = ContentFactory.SERVICE.getInstance().createContent(null, title, true);
+    Content content = ContentFactory.getInstance().createContent(null, title, true);
     final TodoPanel panel = myChangesSupport.createPanel(myProject, settings, content, factory);
     if (panel == null) return;
 

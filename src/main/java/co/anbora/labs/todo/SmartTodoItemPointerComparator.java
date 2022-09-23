@@ -18,18 +18,19 @@ package co.anbora.labs.todo;
 
 import co.anbora.labs.todo.nodes.TodoItemNode;
 import com.intellij.openapi.util.TextRange;
-
 import java.util.Comparator;
 
-public final class SmartTodoItemPointerComparator implements Comparator<TodoItemNode> {
-  public static final SmartTodoItemPointerComparator ourInstance=new SmartTodoItemPointerComparator();
+public final class SmartTodoItemPointerComparator
+    implements Comparator<TodoItemNode> {
+  public static final SmartTodoItemPointerComparator ourInstance =
+      new SmartTodoItemPointerComparator();
 
-  private SmartTodoItemPointerComparator(){}
+  private SmartTodoItemPointerComparator() {}
 
   @Override
-  public int compare(TodoItemNode obj1,TodoItemNode obj2){
-    TextRange range1= obj1.getValue().getTodoItem().getTextRange();
-    TextRange range2= obj2.getValue().getTodoItem().getTextRange();
-    return range1.getStartOffset()-range2.getStartOffset();
+  public int compare(TodoItemNode obj1, TodoItemNode obj2) {
+    TextRange range1 = obj1.getValue().getTodoItem().getTextRange();
+    TextRange range2 = obj2.getValue().getTodoItem().getTextRange();
+    return range1.getStartOffset() - range2.getStartOffset();
   }
 }

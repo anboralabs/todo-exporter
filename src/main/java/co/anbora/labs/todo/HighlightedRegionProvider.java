@@ -18,6 +18,6 @@ package co.anbora.labs.todo;
 
 import com.intellij.ui.HighlightedRegion;
 
-public interface HighlightedRegionProvider{
+public interface HighlightedRegionProvider {
   Iterable<HighlightedRegion> getHighlightedRegions();
 }

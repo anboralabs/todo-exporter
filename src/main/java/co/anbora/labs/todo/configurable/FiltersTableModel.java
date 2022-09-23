@@ -20,23 +20,21 @@ import com.intellij.ide.IdeBundle;
 import com.intellij.ide.todo.TodoFilter;
 import com.intellij.psi.search.TodoPattern;
 import com.intellij.util.ui.ItemRemovable;
+import java.util.List;
+import javax.swing.table.AbstractTableModel;
 import one.util.streamex.StreamEx;
 
-import javax.swing.table.AbstractTableModel;
-import java.util.List;
-
-final class FiltersTableModel extends AbstractTableModel implements ItemRemovable {
-  private final String[] ourColumnNames = new String[]{
-    IdeBundle.message("column.todo.filters.name"),
-    IdeBundle.message("column.todo.filter.patterns")
-  };
-  private final Class<?>[] ourColumnClasses = new Class[]{String.class, String.class};
+final class FiltersTableModel
+    extends AbstractTableModel implements ItemRemovable {
+  private final String[] ourColumnNames =
+      new String[] {IdeBundle.message("column.todo.filters.name"),
+                    IdeBundle.message("column.todo.filter.patterns")};
+  private final Class<?>[] ourColumnClasses =
+      new Class[] {String.class, String.class};
 
   private final List<TodoFilter> myFilters;
 
-  FiltersTableModel(List<TodoFilter> filters) {
-    myFilters = filters;
-  }
+  FiltersTableModel(List<TodoFilter> filters) { myFilters = filters; }
 
   @Override
   public String getColumnName(int column) {

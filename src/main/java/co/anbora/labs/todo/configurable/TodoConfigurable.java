@@ -1,4 +1,5 @@
-// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by
+// the Apache 2.0 license that can be found in the LICENSE file.
 
 package co.anbora.labs.todo.configurable;
 
@@ -17,19 +18,19 @@ import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.table.IconTableCellRenderer;
-import org.jetbrains.annotations.NotNull;
-
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
-public class TodoConfigurable implements SearchableConfigurable, Configurable.NoScroll {
+public class TodoConfigurable
+    implements SearchableConfigurable, Configurable.NoScroll {
   private static final int HEADER_GAP = JBUIScale.scale(20);
   /*
    * UI resources
@@ -83,17 +84,19 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
 
   @Override
   public boolean isModified() {
-    // This method is always invoked before close configuration dialog or leave "ToDo" page.
-    // So it's a good place to commit all changes.
+    // This method is always invoked before close configuration dialog or leave
+    // "ToDo" page. So it's a good place to commit all changes.
     stopEditing();
-    return TodoConfiguration.getInstance().isMultiLine() != myMultiLineCheckBox.isSelected() ||
-           arePatternsModified() || areFiltersModified();
+    return TodoConfiguration.getInstance().isMultiLine() !=
+        myMultiLineCheckBox.isSelected() ||
+        arePatternsModified() || areFiltersModified();
   }
 
   @Override
   public void apply() {
     stopEditing();
-    TodoConfiguration.getInstance().setMultiLine(myMultiLineCheckBox.isSelected());
+    TodoConfiguration.getInstance().setMultiLine(
+        myMultiLineCheckBox.isSelected());
     if (arePatternsModified()) {
       TodoPattern[] patterns = myPatterns.toArray(new TodoPattern[0]);
       TodoConfiguration.getInstance().setTodoPatterns(patterns);
@@ -116,15 +119,19 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
 
   @Override
   public JComponent createComponent() {
-    myMultiLineCheckBox = new JCheckBox(IdeBundle.message("label.todo.multiline"));
+    myMultiLineCheckBox =
+        new JCheckBox(IdeBundle.message("label.todo.multiline"));
 
     myPatternsTable = new JBTable(myPatternsModel);
     myPatternsTable.setShowGrid(false);
-    myPatternsTable.getEmptyText().setText(IdeBundle.message("text.todo.no.patterns"));
+    myPatternsTable.getEmptyText().setText(
+        IdeBundle.message("text.todo.no.patterns"));
     TableColumn typeColumn = myPatternsTable.getColumnModel().getColumn(0);
     JTableHeader tableHeader = myPatternsTable.getTableHeader();
-    FontMetrics headerFontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
-    int typeColumnWidth = headerFontMetrics.stringWidth(myPatternsTable.getColumnName(0) + HEADER_GAP);
+    FontMetrics headerFontMetrics =
+        tableHeader.getFontMetrics(tableHeader.getFont());
+    int typeColumnWidth = headerFontMetrics.stringWidth(
+        myPatternsTable.getColumnName(0) + HEADER_GAP);
     typeColumn.setPreferredWidth(typeColumnWidth);
     typeColumn.setMinWidth(typeColumnWidth);
     typeColumn.setCellRenderer(new IconTableCellRenderer<Icon>() {
@@ -135,8 +142,11 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
       }
 
       @Override
-      public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focus, int row, int column) {
-        super.getTableCellRendererComponent(table, value, selected, focus, row, column);
+      public Component getTableCellRendererComponent(
+          JTable table, Object value, boolean selected, boolean focus, int row,
+          int column) {
+        super.getTableCellRendererComponent(table, value, selected, focus, row,
+                                            column);
         setText("");
         return this;
       }
@@ -148,66 +158,83 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
     });
 
     // Column "Case Sensitive"
-    TableColumn todoCaseSensitiveColumn = myPatternsTable.getColumnModel().getColumn(1);
-    int caseSensitiveColumnWidth = headerFontMetrics.stringWidth(myPatternsTable.getColumnName(1)) + HEADER_GAP;
+    TableColumn todoCaseSensitiveColumn =
+        myPatternsTable.getColumnModel().getColumn(1);
+    int caseSensitiveColumnWidth =
+        headerFontMetrics.stringWidth(myPatternsTable.getColumnName(1)) +
+        HEADER_GAP;
     todoCaseSensitiveColumn.setPreferredWidth(caseSensitiveColumnWidth);
     todoCaseSensitiveColumn.setMinWidth(caseSensitiveColumnWidth);
     todoCaseSensitiveColumn.setCellRenderer(new BooleanTableCellRenderer());
     todoCaseSensitiveColumn.setCellEditor(new BooleanTableCellEditor());
 
     // Column "Pattern"
-    TodoPatternTableCellRenderer todoPatternRenderer = new TodoPatternTableCellRenderer(myPatterns);
+    TodoPatternTableCellRenderer todoPatternRenderer =
+        new TodoPatternTableCellRenderer(myPatterns);
     TableColumn patternColumn = myPatternsTable.getColumnModel().getColumn(2);
     patternColumn.setCellRenderer(todoPatternRenderer);
     patternColumn.setPreferredWidth(patternColumn.getMaxWidth());
 
     JPanel patternsPanel = new JPanel(new BorderLayout());
-    patternsPanel.setBorder(IdeBorderFactory.createTitledBorder(IdeBundle.message("label.todo.patterns"), false, JBUI.insetsTop(8)).setShowLine(false));
-    patternsPanel.add(ToolbarDecorator.createDecorator(myPatternsTable)
-                        .setAddAction(new AnActionButtonRunnable() {
-                          @Override
-                          public void run(AnActionButton button) {
-                            stopEditing();
-                            TodoPattern pattern = new TodoPattern(TodoAttributesUtil.createDefault());
-                            PatternDialog dialog = new PatternDialog(myPanel, pattern, -1, myPatterns);
-                            if (!dialog.showAndGet()) {
-                              return;
-                            }
-                            myPatterns.add(pattern);
-                            int index = myPatterns.size() - 1;
-                            myPatternsModel.fireTableRowsInserted(index, index);
-                            myPatternsTable.getSelectionModel().setSelectionInterval(index, index);
-                            myPatternsTable.scrollRectToVisible(myPatternsTable.getCellRect(index, 0, true));
-                          }
-                        })
-                        .setEditAction(new AnActionButtonRunnable() {
-                          @Override
-                          public void run(AnActionButton button) {
-                            editSelectedPattern();
-                          }
-                        })
-                        .setRemoveAction(new AnActionButtonRunnable() {
-                          @Override
-                          public void run(AnActionButton button) {
-                            stopEditing();
-                            int selectedIndex = myPatternsTable.getSelectedRow();
-                            if (selectedIndex < 0 || selectedIndex >= myPatternsModel.getRowCount()) {
-                              return;
-                            }
-                            TodoPattern patternToBeRemoved = myPatterns.get(selectedIndex);
-                            TableUtil.removeSelectedItems(myPatternsTable);
-                            for (int i = 0; i < myFilters.size(); i++) {
-                              TodoFilter filter = myFilters.get(i);
-                              if (filter.contains(patternToBeRemoved)) {
-                                filter.removeTodoPattern(patternToBeRemoved);
-                                myFiltersModel.fireTableRowsUpdated(i, i);
-                              }
-                            }
-                          }
-                        })
-                        .disableUpDownActions().createPanel(), BorderLayout.CENTER);
+    patternsPanel.setBorder(
+        IdeBorderFactory
+            .createTitledBorder(IdeBundle.message("label.todo.patterns"), false,
+                                JBUI.insetsTop(8))
+            .setShowLine(false));
+    patternsPanel.add(
+        ToolbarDecorator.createDecorator(myPatternsTable)
+            .setAddAction(new AnActionButtonRunnable() {
+              @Override
+              public void run(AnActionButton button) {
+                stopEditing();
+                TodoPattern pattern =
+                    new TodoPattern(TodoAttributesUtil.createDefault());
+                PatternDialog dialog =
+                    new PatternDialog(myPanel, pattern, -1, myPatterns);
+                if (!dialog.showAndGet()) {
+                  return;
+                }
+                myPatterns.add(pattern);
+                int index = myPatterns.size() - 1;
+                myPatternsModel.fireTableRowsInserted(index, index);
+                myPatternsTable.getSelectionModel().setSelectionInterval(index,
+                                                                         index);
+                myPatternsTable.scrollRectToVisible(
+                    myPatternsTable.getCellRect(index, 0, true));
+              }
+            })
+            .setEditAction(new AnActionButtonRunnable() {
+              @Override
+              public void run(AnActionButton button) {
+                editSelectedPattern();
+              }
+            })
+            .setRemoveAction(new AnActionButtonRunnable() {
+              @Override
+              public void run(AnActionButton button) {
+                stopEditing();
+                int selectedIndex = myPatternsTable.getSelectedRow();
+                if (selectedIndex < 0 ||
+                    selectedIndex >= myPatternsModel.getRowCount()) {
+                  return;
+                }
+                TodoPattern patternToBeRemoved = myPatterns.get(selectedIndex);
+                TableUtil.removeSelectedItems(myPatternsTable);
+                for (int i = 0; i < myFilters.size(); i++) {
+                  TodoFilter filter = myFilters.get(i);
+                  if (filter.contains(patternToBeRemoved)) {
+                    filter.removeTodoPattern(patternToBeRemoved);
+                    myFiltersModel.fireTableRowsUpdated(i, i);
+                  }
+                }
+              }
+            })
+            .disableUpDownActions()
+            .createPanel(),
+        BorderLayout.CENTER);
 
-    // double click in "Patterns" table should also start editing of selected pattern
+    // double click in "Patterns" table should also start editing of selected
+    // pattern
     new DoubleClickListener() {
       @Override
       protected boolean onDoubleClick(@NotNull MouseEvent e) {
@@ -219,7 +246,8 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
     // Panel with filters
     myFiltersTable = new JBTable(myFiltersModel);
     myFiltersTable.setShowGrid(false);
-    myFiltersTable.getEmptyText().setText(IdeBundle.message("text.todo.no.filters"));
+    myFiltersTable.getEmptyText().setText(
+        IdeBundle.message("text.todo.no.filters"));
 
     // Column "Name"
     TableColumn nameColumn = myFiltersTable.getColumnModel().getColumn(0);
@@ -232,37 +260,46 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
     patternsColumn.setPreferredWidth(patternsColumn.getMaxWidth());
 
     JPanel filtersPanel = new JPanel(new BorderLayout());
-    filtersPanel.setBorder(IdeBorderFactory.createTitledBorder(IdeBundle.message("label.todo.filters"), false, JBUI.insetsTop(13))
-                             .setShowLine(false));
-    filtersPanel.add(ToolbarDecorator.createDecorator(myFiltersTable)
-                        .setAddAction(new AnActionButtonRunnable() {
-                          @Override
-                          public void run(AnActionButton button) {
-                            stopEditing();
-                            TodoFilter filter = new TodoFilter();
-                            FilterDialog dialog = new FilterDialog(myPanel, filter, -1, myFilters, myPatterns);
-                            if (dialog.showAndGet()) {
-                              myFilters.add(filter);
-                              int index = myFilters.size() - 1;
-                              myFiltersModel.fireTableRowsInserted(index, index);
-                              myFiltersTable.getSelectionModel().setSelectionInterval(index, index);
-                              myFiltersTable.scrollRectToVisible(myFiltersTable.getCellRect(index, 0, true));
-                            }
-                          }
-                        })
-                        .setEditAction(new AnActionButtonRunnable() {
-                          @Override
-                          public void run(AnActionButton button) {
-                            editSelectedFilter();
-                          }
-                        })
-                        .setRemoveAction(new AnActionButtonRunnable() {
-                          @Override
-                          public void run(AnActionButton button) {
-                            stopEditing();
-                            TableUtil.removeSelectedItems(myFiltersTable);
-                          }
-                        }).disableUpDownActions().createPanel());
+    filtersPanel.setBorder(
+        IdeBorderFactory
+            .createTitledBorder(IdeBundle.message("label.todo.filters"), false,
+                                JBUI.insetsTop(13))
+            .setShowLine(false));
+    filtersPanel.add(
+        ToolbarDecorator.createDecorator(myFiltersTable)
+            .setAddAction(new AnActionButtonRunnable() {
+              @Override
+              public void run(AnActionButton button) {
+                stopEditing();
+                TodoFilter filter = new TodoFilter();
+                FilterDialog dialog = new FilterDialog(myPanel, filter, -1,
+                                                       myFilters, myPatterns);
+                if (dialog.showAndGet()) {
+                  myFilters.add(filter);
+                  int index = myFilters.size() - 1;
+                  myFiltersModel.fireTableRowsInserted(index, index);
+                  myFiltersTable.getSelectionModel().setSelectionInterval(
+                      index, index);
+                  myFiltersTable.scrollRectToVisible(
+                      myFiltersTable.getCellRect(index, 0, true));
+                }
+              }
+            })
+            .setEditAction(new AnActionButtonRunnable() {
+              @Override
+              public void run(AnActionButton button) {
+                editSelectedFilter();
+              }
+            })
+            .setRemoveAction(new AnActionButtonRunnable() {
+              @Override
+              public void run(AnActionButton button) {
+                stopEditing();
+                TableUtil.removeSelectedItems(myFiltersTable);
+              }
+            })
+            .disableUpDownActions()
+            .createPanel());
 
     new DoubleClickListener() {
       @Override
@@ -273,10 +310,10 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
     }.installOn(myFiltersTable);
 
     myPanel = FormBuilder.createFormBuilder()
-                         .addComponent(myMultiLineCheckBox)
-                         .addComponentFillVertically(patternsPanel, 0)
-                         .addComponentFillVertically(filtersPanel, 0)
-                         .getPanel();
+                  .addComponent(myMultiLineCheckBox)
+                  .addComponentFillVertically(patternsPanel, 0)
+                  .addComponentFillVertically(filtersPanel, 0)
+                  .getPanel();
     return myPanel;
   }
 
@@ -288,14 +325,16 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
     }
     TodoPattern sourcePattern = myPatterns.get(selectedIndex);
     TodoPattern pattern = sourcePattern.clone();
-    PatternDialog dialog = new PatternDialog(myPanel, pattern, selectedIndex, myPatterns);
+    PatternDialog dialog =
+        new PatternDialog(myPanel, pattern, selectedIndex, myPatterns);
     dialog.setTitle(IdeBundle.message("title.edit.todo.pattern"));
     if (!dialog.showAndGet()) {
       return;
     }
     myPatterns.set(selectedIndex, pattern);
     myPatternsModel.fireTableRowsUpdated(selectedIndex, selectedIndex);
-    myPatternsTable.getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
+    myPatternsTable.getSelectionModel().setSelectionInterval(selectedIndex,
+                                                             selectedIndex);
     // Update model with patterns
     for (int i = 0; i < myFilters.size(); i++) {
       TodoFilter filter = myFilters.get(i);
@@ -315,14 +354,16 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
     }
     TodoFilter sourceFilter = myFilters.get(selectedIndex);
     TodoFilter filter = sourceFilter.clone();
-    FilterDialog dialog = new FilterDialog(myPanel, filter, selectedIndex, myFilters, myPatterns);
+    FilterDialog dialog =
+        new FilterDialog(myPanel, filter, selectedIndex, myFilters, myPatterns);
     dialog.setTitle(IdeBundle.message("title.edit.todo.filter"));
     dialog.show();
     int exitCode = dialog.getExitCode();
     if (DialogWrapper.OK_EXIT_CODE == exitCode) {
       myFilters.set(selectedIndex, filter);
       myFiltersModel.fireTableRowsUpdated(selectedIndex, selectedIndex);
-      myFiltersTable.getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
+      myFiltersTable.getSelectionModel().setSelectionInterval(selectedIndex,
+                                                              selectedIndex);
     }
   }
 
@@ -354,7 +395,8 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
 
   @Override
   public void reset() {
-    myMultiLineCheckBox.setSelected(TodoConfiguration.getInstance().isMultiLine());
+    myMultiLineCheckBox.setSelected(
+        TodoConfiguration.getInstance().isMultiLine());
     // Patterns
     myPatterns.clear();
     TodoConfiguration todoConfiguration = TodoConfiguration.getInstance();
@@ -372,23 +414,27 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
     myFiltersModel.fireTableDataChanged();
   }
 
-  protected TodoPattern @NotNull [] getTodoPatternsToDisplay(TodoConfiguration todoConfiguration) {
+  protected TodoPattern
+      @NotNull[] getTodoPatternsToDisplay(TodoConfiguration todoConfiguration) {
     return todoConfiguration.getTodoPatterns();
   }
 
-  private final class MyFilterNameTableCellRenderer extends DefaultTableCellRenderer {
+  private final class MyFilterNameTableCellRenderer
+      extends DefaultTableCellRenderer {
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-      super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+    public Component getTableCellRendererComponent(JTable table, Object value,
+                                                   boolean isSelected,
+                                                   boolean hasFocus, int row,
+                                                   int column) {
+      super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+                                          row, column);
       TodoFilter filter = myFilters.get(row);
       if (isSelected) {
         setForeground(UIUtil.getTableSelectionForeground(true));
-      }
-      else {
+      } else {
         if (filter.isEmpty()) {
           setForeground(JBColor.RED);
-        }
-        else {
+        } else {
           setForeground(UIUtil.getTableForeground());
         }
       }
@@ -401,5 +447,4 @@ public class TodoConfigurable implements SearchableConfigurable, Configurable.No
   public String getId() {
     return getHelpTopic();
   }
-
 }

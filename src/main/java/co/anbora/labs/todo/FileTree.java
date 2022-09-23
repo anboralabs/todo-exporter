@@ -1,11 +1,11 @@
-// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by
+// the Apache 2.0 license that can be found in the LICENSE file.
 package co.anbora.labs.todo;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.containers.ContainerUtil;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -39,8 +39,7 @@ final class FileTree {
     if (children != null) {
       LOG.assertTrue(!children.contains(file));
       children.add(file);
-    }
-    else {
+    } else {
       children = ContainerUtil.createConcurrentList();
       children.add(file);
       myStrictDirectory2Children.put(dir, children);
@@ -51,8 +50,7 @@ final class FileTree {
       LOG.assertTrue(!children.contains(file));
       children.add(file);
       return;
-    }
-    else {
+    } else {
       children = ContainerUtil.createConcurrentList();
       children.add(file);
       myDirectory2Children.put(dir, children);
@@ -66,8 +64,7 @@ final class FileTree {
           children.add(dir);
         }
         return;
-      }
-      else {
+      } else {
         children = ContainerUtil.createConcurrentList();
         children.add(dir);
         myDirectory2Children.put(parent, children);
@@ -101,7 +98,8 @@ final class FileTree {
     for (VirtualFile _directory : myDirectory2Children.keySet()) {
       List<VirtualFile> children = myDirectory2Children.get(_directory);
       LOG.assertTrue(children != null);
-      dirsToBeRemoved = collectDirsToRemove(file, children, dirsToBeRemoved, _directory);
+      dirsToBeRemoved =
+          collectDirsToRemove(file, children, dirsToBeRemoved, _directory);
     }
     for (VirtualFile dir : myStrictDirectory2Children.keySet()) {
       List<VirtualFile> children = myStrictDirectory2Children.get(dir);
@@ -118,19 +116,23 @@ final class FileTree {
   }
 
   /**
-   * The method removes specified {@code psiDirectory} from the tree. The directory should be empty,
-   * otherwise the method shows java.lang.IllegalArgumentException
+   * The method removes specified {@code psiDirectory} from the tree. The
+   * directory should be empty, otherwise the method shows
+   * java.lang.IllegalArgumentException
    */
   private void removeDir(VirtualFile psiDirectory) {
     if (!myDirectory2Children.containsKey(psiDirectory)) {
-      throw new IllegalArgumentException("directory is not in the tree: " + psiDirectory);
+      throw new IllegalArgumentException("directory is not in the tree: " +
+                                         psiDirectory);
     }
     List<VirtualFile> children = myDirectory2Children.remove(psiDirectory);
     if (children == null) {
-      throw new IllegalArgumentException("directory has no children list: " + psiDirectory);
+      throw new IllegalArgumentException("directory has no children list: " +
+                                         psiDirectory);
     }
     if (children.size() > 0) {
-      throw new IllegalArgumentException("directory isn't empty: " + psiDirectory);
+      throw new IllegalArgumentException("directory isn't empty: " +
+                                         psiDirectory);
     }
     //
     myStrictDirectory2Children.remove(psiDirectory);
@@ -138,7 +140,8 @@ final class FileTree {
     for (VirtualFile _directory : myDirectory2Children.keySet()) {
       children = myDirectory2Children.get(_directory);
       LOG.assertTrue(children != null);
-      dirsToBeRemoved = collectDirsToRemove(psiDirectory, children, dirsToBeRemoved, _directory);
+      dirsToBeRemoved = collectDirsToRemove(psiDirectory, children,
+                                            dirsToBeRemoved, _directory);
     }
     //
     if (dirsToBeRemoved != null) {
@@ -148,10 +151,10 @@ final class FileTree {
     }
   }
 
-  private static List<VirtualFile> collectDirsToRemove(VirtualFile psiDirectory,
-                                                       List<VirtualFile> children,
-                                                       List<VirtualFile> dirsToBeRemoved,
-                                                       VirtualFile _directory) {
+  private static List<VirtualFile>
+  collectDirsToRemove(VirtualFile psiDirectory, List<VirtualFile> children,
+                      List<VirtualFile> dirsToBeRemoved,
+                      VirtualFile _directory) {
     if (children.contains(psiDirectory)) {
       children.remove(psiDirectory);
       if (children.size() == 0) {
@@ -164,9 +167,7 @@ final class FileTree {
     return dirsToBeRemoved;
   }
 
-  boolean contains(VirtualFile file) {
-    return myFiles.contains(file);
-  }
+  boolean contains(VirtualFile file) { return myFiles.contains(file); }
 
   void clear() {
     myStrictDirectory2Children.clear();
@@ -177,9 +178,7 @@ final class FileTree {
   /**
    * @return iterator of all files.
    */
-  Iterator<VirtualFile> getFileIterator() {
-    return myFiles.iterator();
-  }
+  Iterator<VirtualFile> getFileIterator() { return myFiles.iterator(); }
 
   /**
    * @return all files (in depth) located under specified {@code psiDirectory}.
@@ -191,7 +190,8 @@ final class FileTree {
     return filesList;
   }
 
-  private void collectFiles(VirtualFile dir, List<? super VirtualFile> filesList) {
+  private void collectFiles(VirtualFile dir,
+                            List<? super VirtualFile> filesList) {
     List<VirtualFile> children = myDirectory2Children.get(dir);
     if (children != null) {
       for (VirtualFile child : children) {
@@ -201,8 +201,7 @@ final class FileTree {
             LOG.assertTrue(!filesList.contains(child));
           }
           filesList.add(child);
-        }
-        else {
+        } else {
           collectFiles(child, filesList);
         }
       }

@@ -18,22 +18,21 @@ package co.anbora.labs.todo;
 
 import com.intellij.ide.util.scopeChooser.ScopeChooserCombo;
 import com.intellij.openapi.project.Project;
+import javax.swing.*;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-
-public class ScopeBasedTodosTreeBuilder extends TodoTreeBuilder{
+public class ScopeBasedTodosTreeBuilder extends TodoTreeBuilder {
   private final ScopeChooserCombo myScopes;
 
-  public ScopeBasedTodosTreeBuilder(JTree tree, Project project, ScopeChooserCombo scopes){
+  public ScopeBasedTodosTreeBuilder(JTree tree, Project project,
+                                    ScopeChooserCombo scopes) {
     super(tree, project);
     myScopes = scopes;
   }
 
   @Override
   @NotNull
-  protected TodoTreeStructure createTreeStructure(){
+  protected TodoTreeStructure createTreeStructure() {
     return new ScopeBasedTodosTreeStructure(myProject, myScopes);
   }
-
 }

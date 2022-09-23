@@ -1,22 +1,23 @@
-// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by
+// the Apache 2.0 license that can be found in the LICENSE file.
 
 package co.anbora.labs.todo.nodes;
 
-import com.intellij.ide.projectView.PresentationData;
 import co.anbora.labs.todo.ToDoSummary;
 import co.anbora.labs.todo.TodoTreeBuilder;
+import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import org.jetbrains.annotations.NotNull;
 
 public class ToDoRootNode extends BaseToDoNode<Object> {
   private final SummaryNode mySummaryNode;
 
-  public ToDoRootNode(Project project, Object value, TodoTreeBuilder builder, @NotNull ToDoSummary summary) {
+  public ToDoRootNode(Project project, Object value, TodoTreeBuilder builder,
+                      @NotNull ToDoSummary summary) {
     super(project, value, builder);
     mySummaryNode = createSummaryNode(summary);
   }
@@ -32,12 +33,9 @@ public class ToDoRootNode extends BaseToDoNode<Object> {
   }
 
   @Override
-  public void update(@NotNull PresentationData presentation) {
-  }
+  public void update(@NotNull PresentationData presentation) {}
 
-  public Object getSummaryNode() {
-    return mySummaryNode;
-  }
+  public Object getSummaryNode() { return mySummaryNode; }
 
   @Override
   public String getTestPresentation() {

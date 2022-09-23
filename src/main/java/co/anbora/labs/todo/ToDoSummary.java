@@ -16,5 +16,4 @@
 
 package co.anbora.labs.todo;
 
-public class ToDoSummary{
-}
+public class ToDoSummary {}

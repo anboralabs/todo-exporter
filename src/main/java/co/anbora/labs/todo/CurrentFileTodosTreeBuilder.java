@@ -20,26 +20,26 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.Processor;
+import javax.swing.*;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-
 public class CurrentFileTodosTreeBuilder extends TodoTreeBuilder {
-  public CurrentFileTodosTreeBuilder(JTree tree, Project project){
+  public CurrentFileTodosTreeBuilder(JTree tree, Project project) {
     super(tree, project);
   }
 
   @Override
   @NotNull
-  protected TodoTreeStructure createTreeStructure(){
+  protected TodoTreeStructure createTreeStructure() {
     return new CurrentFileTodosTreeStructure(myProject);
   }
 
   @Override
   void collectFiles(@NotNull Processor<? super VirtualFile> collector) {
-    CurrentFileTodosTreeStructure treeStructure=(CurrentFileTodosTreeStructure)getTodoTreeStructure();
-    PsiFile psiFile=treeStructure.getFile();
-    if(treeStructure.accept(psiFile)){
+    CurrentFileTodosTreeStructure treeStructure =
+        (CurrentFileTodosTreeStructure)getTodoTreeStructure();
+    PsiFile psiFile = treeStructure.getFile();
+    if (treeStructure.accept(psiFile)) {
       collector.process(psiFile.getVirtualFile());
     }
   }
@@ -47,8 +47,9 @@ public class CurrentFileTodosTreeBuilder extends TodoTreeBuilder {
   /**
    * @see CurrentFileTodosTreeStructure#setFile
    */
-  public void setFile(PsiFile file){
-    CurrentFileTodosTreeStructure treeStructure=(CurrentFileTodosTreeStructure)getTodoTreeStructure();
+  public void setFile(PsiFile file) {
+    CurrentFileTodosTreeStructure treeStructure =
+        (CurrentFileTodosTreeStructure)getTodoTreeStructure();
     treeStructure.setFile(file);
     rebuildCache();
   }

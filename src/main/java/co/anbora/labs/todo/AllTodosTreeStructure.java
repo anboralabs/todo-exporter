@@ -22,17 +22,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 
 public class AllTodosTreeStructure extends TodoTreeStructure {
-  public AllTodosTreeStructure(final Project project) {
-    super(project);
-  }
+  public AllTodosTreeStructure(final Project project) { super(project); }
 
   @Override
   public boolean accept(final PsiFile psiFile) {
     return psiFile.isValid() &&
-           (
-             myTodoFilter != null && myTodoFilter.accept(mySearchHelper, psiFile) ||
-             (myTodoFilter == null && mySearchHelper.getTodoItemsCount(psiFile) > 0)
-           );
+        (myTodoFilter != null && myTodoFilter.accept(mySearchHelper, psiFile) ||
+         (myTodoFilter == null &&
+          mySearchHelper.getTodoItemsCount(psiFile) > 0));
   }
 
   @Override
@@ -47,7 +44,7 @@ public class AllTodosTreeStructure extends TodoTreeStructure {
 
   @Override
   protected AbstractTreeNode createRootElement() {
-    return new ToDoRootNode(myProject, new Object(),
-                            myBuilder, mySummaryElement);
+    return new ToDoRootNode(myProject, new Object(), myBuilder,
+                            mySummaryElement);
   }
 }

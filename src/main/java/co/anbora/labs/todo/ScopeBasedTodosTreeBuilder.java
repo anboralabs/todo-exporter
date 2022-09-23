@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class ScopeBasedTodosTreeBuilder extends TodoTreeBuilder {
+public class ScopeBasedTodosTreeBuilder extends TodoTreeBuilder{
   private final ScopeChooserCombo myScopes;
 
   public ScopeBasedTodosTreeBuilder(JTree tree, Project project, ScopeChooserCombo scopes){

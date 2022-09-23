@@ -21,16 +21,13 @@ import com.intellij.openapi.util.TextRange;
 
 import java.util.Comparator;
 
-/**
- * @author Vladimir Kondratyev
- */
 public final class SmartTodoItemPointerComparator implements Comparator<TodoItemNode> {
   public static final SmartTodoItemPointerComparator ourInstance=new SmartTodoItemPointerComparator();
 
   private SmartTodoItemPointerComparator(){}
 
   @Override
-  public int compare(TodoItemNode obj1, TodoItemNode obj2){
+  public int compare(TodoItemNode obj1,TodoItemNode obj2){
     TextRange range1= obj1.getValue().getTodoItem().getTextRange();
     TextRange range2= obj2.getValue().getTodoItem().getTextRange();
     return range1.getStartOffset()-range2.getStartOffset();

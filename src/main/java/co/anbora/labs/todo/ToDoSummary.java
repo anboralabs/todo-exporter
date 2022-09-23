@@ -16,8 +16,5 @@
 
 package co.anbora.labs.todo;
 
-/**
- * @author Vladimir Kondratyev
- */
 public class ToDoSummary{
 }

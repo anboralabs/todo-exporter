@@ -4,11 +4,14 @@ package co.anbora.labs.todo
 import com.intellij.ide.todo.TodoPanelSettings
 import com.intellij.lang.LangBundle
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.NlsContext
 import com.intellij.openapi.util.NlsContexts
 import com.intellij.ui.content.Content
 import com.intellij.ui.content.ContentManager
 import com.intellij.util.messages.MessageBusConnection
+import org.jetbrains.annotations.ApiStatus
 
+@ApiStatus.Internal
 open class TodoViewChangesSupport {
 
   open fun isContentVisible(project: Project) : Boolean {

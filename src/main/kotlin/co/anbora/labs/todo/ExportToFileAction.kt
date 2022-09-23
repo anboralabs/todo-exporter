@@ -26,13 +26,17 @@ class ExportToFileAction(
         val dataContext = e.dataContext
         val project = CommonDataKeys.PROJECT.getData(dataContext)
 
-        val toPrint = mySearchHelper.findFilesWithTodoItems()
-            .flatMap { mySearchHelper.findTodoItems(it).asIterable() }
-            .joinToString(separator = "\n") { todoItem: TodoItem ->
-                val document = PsiDocumentManager.getInstance(myProject).getDocument(todoItem.file)
-                val pointer = SmartTodoItemPointer(todoItem, document!!)
-                TodoExportItemNode(myProject, pointer, supplierBuilder.get()).toString()
-            }
+        var toPrint = ""
+
+        mySearchHelper.processFilesWithTodoItems {
+            toPrint += mySearchHelper.findTodoItems(it).asIterable()
+                .joinToString(separator = "\n") { todoItem: TodoItem ->
+                    val document = PsiDocumentManager.getInstance(myProject).getDocument(todoItem.file)
+                    val pointer = SmartTodoItemPointer(todoItem, document!!)
+                    TodoExportItemNode(myProject, pointer, supplierBuilder.get()).toString()
+                }
+            true
+        }
 
         val exporterToTextFile: ExporterToTextFile = ExporterTodoToString(toPrint)
         if (project == null) return

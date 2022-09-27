@@ -111,7 +111,7 @@ public final class ExportToFileUtil {
         @Override
         protected String chosenFileToResultingText(
             @NotNull VirtualFile chosenFile) {
-          String res = super.chosenFileToResultingText(chosenFile);
+          String res = chosenFile.getPresentableUrl();
           if (chosenFile.isDirectory()) {
             res += File.separator +
                    PathUtil.getFileName(myExporter.getDefaultFilePath());
@@ -124,12 +124,7 @@ public final class ExportToFileUtil {
       setOKButtonText(IdeBundle.message("button.save"));
       init();
       try {
-        myListener = new ChangeListener() {
-          @Override
-          public void stateChanged(ChangeEvent e) {
-            initText();
-          }
-        };
+        myListener = e -> initText();
         myExporter.addSettingsChangedListener(myListener);
       } catch (TooManyListenersException e) {
         LOG.error(e);

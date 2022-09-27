@@ -11,7 +11,6 @@ import com.intellij.ui.content.ContentManager
 import com.intellij.util.messages.MessageBusConnection
 import org.jetbrains.annotations.ApiStatus
 
-@ApiStatus.Internal
 open class TodoViewChangesSupport {
 
   open fun isContentVisible(project: Project) : Boolean {

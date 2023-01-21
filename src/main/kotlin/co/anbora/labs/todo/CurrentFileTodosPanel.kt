@@ -26,7 +26,6 @@ abstract class CurrentFileTodosPanel(
         //    setFile(if (files.isEmpty()) null else PsiManager.getInstance(myProject).findFile(files[0]), true)
         //}
         // It's important to remove this listener. It prevents invocation of setFile method after the tree builder is disposed
-        // It's important to remove this listener. It prevents invocation of setFile method after the tree builder is disposed
         project.messageBus.connect(this)
             .subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, object : FileEditorManagerListener {
                 override fun selectionChanged(e: FileEditorManagerEvent) {

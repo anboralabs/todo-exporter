@@ -6,27 +6,21 @@ import co.anbora.labs.todo.nodes.TodoExportItemNode
 import com.intellij.icons.AllIcons
 import com.intellij.ide.ExporterToTextFile
 import com.intellij.ide.IdeBundle
-import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.Task
-import com.intellij.openapi.progress.withBackgroundProgress
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.search.PsiTodoSearchHelper
 import com.intellij.psi.search.TodoItem
 import com.intellij.util.concurrency.AppExecutorUtil
-import com.intellij.util.concurrency.BoundedTaskExecutor
-import java.util.concurrent.Executors
 import java.util.function.Supplier
 
-private val executor = Executors.newSingleThreadExecutor()
 class ExportToFileAction(
     private val currentProject: Project,
     private val supplierBuilder: Supplier<TodoTreeBuilder>

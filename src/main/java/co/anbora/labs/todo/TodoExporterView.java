@@ -304,7 +304,7 @@ public class TodoExporterView
           }
           return files;
         })
-        .finishOnUiThread(ModalityState.NON_MODAL,
+        .finishOnUiThread(ModalityState.nonModal(),
                           files -> {
                             for (TodoPanel panel : myPanels) {
                               panel.rebuildCache(ObjectUtils.notNull(

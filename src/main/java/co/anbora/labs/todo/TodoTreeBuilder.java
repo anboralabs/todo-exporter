@@ -42,6 +42,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.SingleAlarm;
 import com.intellij.util.SmartList;
 import com.intellij.util.concurrency.NonUrgentExecutor;
+import com.intellij.util.concurrency.ThreadingAssertions;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.tree.TreeUtil;
@@ -318,7 +319,7 @@ public abstract class TodoTreeBuilder implements Disposable {
    *         It means that file is in "dirty" file set or in "current" file set.
    */
   private boolean canContainTodoItems(PsiFile psiFile) {
-    ApplicationManager.getApplication().assertWriteIntentLockAcquired();
+    ThreadingAssertions.assertWriteIntentReadAccess();
     VirtualFile vFile = psiFile.getVirtualFile();
     return myFileTree.contains(vFile) || myDirtyFileSet.contains(vFile);
   }
@@ -330,13 +331,13 @@ public abstract class TodoTreeBuilder implements Disposable {
    * invoked when any modifications inside the file have happened.
    */
   private void markFileAsDirty(@NotNull PsiFile psiFile) {
-    ApplicationManager.getApplication().assertWriteIntentLockAcquired();
+    ThreadingAssertions.assertWriteIntentReadAccess();
     markFileAsDirty(psiFile.getVirtualFile()); // If PSI file isn't valid then
                                                // its VirtualFile can be null
   }
 
   private void markFileAsDirty(VirtualFile vFile) {
-    ApplicationManager.getApplication().assertWriteIntentLockAcquired();
+    ThreadingAssertions.assertWriteIntentReadAccess();
     if (vFile != null && !(vFile instanceof LightVirtualFile)) {
       myDirtyFileSet.add(vFile);
     }
@@ -357,7 +358,7 @@ public abstract class TodoTreeBuilder implements Disposable {
         new SingleAlarm(()
                             -> uiUpdater.accept(files),
                         1000, uiUpdater, Alarm.ThreadToUse.SWING_THREAD,
-                        ModalityState.NON_MODAL);
+                        ModalityState.nonModal());
     ReadAction
         .nonBlocking(() -> {
           collectFiles(virtualFile -> {
@@ -372,7 +373,7 @@ public abstract class TodoTreeBuilder implements Disposable {
           });
           return files;
         })
-        .finishOnUiThread(ModalityState.NON_MODAL,
+        .finishOnUiThread(ModalityState.nonModal(),
                           o -> {
                             if (uiUpdater.isDisposed())
                               return;
@@ -430,7 +431,7 @@ public abstract class TodoTreeBuilder implements Disposable {
   }
 
   protected void rebuildCache(@NotNull Set<? extends VirtualFile> files) {
-    ApplicationManager.getApplication().assertWriteIntentLockAcquired();
+    ThreadingAssertions.assertWriteIntentReadAccess();
     myFileTree.clear();
     myDirtyFileSet.clear();
     myFile2Highlighter.clear();

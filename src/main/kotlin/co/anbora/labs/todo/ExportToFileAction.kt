@@ -48,7 +48,7 @@ class ExportToFileAction(
                         true
                     }
                     toPrint
-                }.finishOnUiThread(ModalityState.NON_MODAL) {
+                }.finishOnUiThread(ModalityState.nonModal()) {
                     val exporterToTextFile: ExporterToTextFile = ExporterTodoToString(it)
                     if (project != null && exporterToTextFile.canExport()) {
                         ExportToFileUtil.chooseFileAndExport(project, exporterToTextFile)

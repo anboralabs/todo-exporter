@@ -29,7 +29,7 @@ final class FileTree {
 
     VirtualFile dir = file.getParent();
     if (dir == null) {
-      LOG.error(file);
+      LOG.error(String.valueOf(file));
       return;
     }
 

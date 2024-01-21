@@ -92,13 +92,13 @@ open class TodoItemNode(
             getNodeInfo(todoItemPointer, myRangeMarker)
 
         // Update icon
-        val newIcon = todoItem.pattern.attributes.icon
+        val newIcon = todoItem.pattern?.attributes?.icon
 
         // Update highlighted regions
         myHighlightedRegions.clear()
         val highlighter = myBuilder.getHighlighter(todoItem.file, document)
         collectHighlights(myHighlightedRegions, highlighter, lineStartOffset, lineEndOffset, lineColumnPrefix.length)
-        val attributes = todoItem.pattern.attributes.textAttributes
+        val attributes = todoItem.pattern?.attributes?.textAttributes
         myHighlightedRegions.add(
             HighlightedRegion(
                 lineColumnPrefix.length + startOffset - lineStartOffset,

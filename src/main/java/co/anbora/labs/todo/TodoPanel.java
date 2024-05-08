@@ -222,8 +222,8 @@ public abstract class TodoPanel extends SimpleToolWindowPanel
         new ExportToFileAction(myProject, () -> myTodoTreeBuilder));
     toolbarGroup.add(new PreviousOccurenceToolbarAction(myOccurenceNavigator));
     toolbarGroup.add(new NextOccurenceToolbarAction(myOccurenceNavigator));
-    toolbarGroup.add(
-        new SetTodoFilterAction(myProject, mySettings, this::setTodoFilter));
+    /*toolbarGroup.add(
+        new SetTodoFilterAction(myProject, mySettings, this::setTodoFilter));*/
     toolbarGroup.add(createAutoScrollToSourceAction());
     toolbarGroup.add(CommonActionsManager.getInstance().createExpandAllAction(
         myTreeExpander, this));

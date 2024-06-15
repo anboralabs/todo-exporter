@@ -15,12 +15,10 @@ import com.intellij.util.concurrency.annotations.RequiresReadLock
 import com.intellij.util.ui.tree.TreeUtil
 import kotlinx.coroutines.*
 import kotlinx.coroutines.future.asCompletableFuture
-import org.jetbrains.annotations.ApiStatus
 import java.util.concurrent.CompletableFuture
 
 private val ASYNC_BATCH_SIZE = RegistryManager.getInstance().get("ide.tree.ui.async.batch.size")
 
-@ApiStatus.Internal
 private class TodoTreeBuilderCoroutineHelper(private val treeBuilder: TodoTreeBuilder) : Disposable {
 
   private val scope = CoroutineScope(SupervisorJob())

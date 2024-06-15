@@ -2,17 +2,17 @@
 
 package co.anbora.labs.todo.nodes;
 
+import co.anbora.labs.todo.SmartTodoItemPointer;
+import co.anbora.labs.todo.TodoTreeBuilder;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
-import co.anbora.labs.todo.SmartTodoItemPointer;
-import co.anbora.labs.todo.SmartTodoItemPointerComparator;
 import com.intellij.ide.todo.TodoFilter;
-import co.anbora.labs.todo.TodoTreeBuilder;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.injected.editor.DocumentWindow;
 import com.intellij.lang.injection.InjectedLanguageManager;
+import com.intellij.notebook.editor.BackFileViewProvider;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
@@ -33,52 +33,59 @@ public final class TodoFileNode extends PsiFileNode {
   public TodoFileNode(Project project,
                       @NotNull PsiFile file,
                       TodoTreeBuilder treeBuilder,
-                      boolean singleFileMode){
-    super(project,file,ViewSettings.DEFAULT);
-    myBuilder=treeBuilder;
-    mySingleFileMode=singleFileMode;
+                      boolean singleFileMode) {
+    super(project, file, ViewSettings.DEFAULT);
+    myBuilder = treeBuilder;
+    mySingleFileMode = singleFileMode;
   }
 
   @Override
-  public Collection<AbstractTreeNode<?>> getChildrenImpl() {
+  public @NotNull List<AbstractTreeNode<?>> getChildrenImpl() {
     try {
-      if (!mySingleFileMode) {
-        return (Collection<AbstractTreeNode<?>>)createGeneralList();
-      }
-      return (Collection<AbstractTreeNode<?>>)createListForSingleFile();
-    }
-    catch (IndexNotReadyException e) {
-      return Collections.emptyList();
-    }
-  }
+      PsiFile psiFile = getValue();
+      assert psiFile != null;
 
-  private Collection<? extends AbstractTreeNode<?>> createListForSingleFile() {
-    PsiFile psiFile = getValue();
-    TodoItem[] items= findAllTodos(psiFile, myBuilder.getTodoTreeStructure().getSearchHelper());
-    List<TodoItemNode> children= new ArrayList<>(items.length);
-    Document document = PsiDocumentManager.getInstance(getProject()).getDocument(psiFile);
-    if (document != null) {
-      for (TodoItem todoItem : items) {
-        if (todoItem.getTextRange().getEndOffset() < document.getTextLength() + 1) {
-          SmartTodoItemPointer pointer = new SmartTodoItemPointer(todoItem, document);
-          TodoFilter toDoFilter = getToDoFilter();
-          if (toDoFilter != null) {
-            TodoItemNode itemNode = new TodoItemNode(getProject(), pointer, myBuilder);
-            if (toDoFilter.contains(todoItem.getPattern())) {
-              children.add(itemNode);
-            }
-          } else {
-            children.add(new TodoItemNode(getProject(), pointer, myBuilder));
-          }
+      FileViewProvider viewProvider = psiFile.getViewProvider();
+      //noinspection deprecation
+      if (viewProvider instanceof BackFileViewProvider) {
+        //noinspection deprecation
+        psiFile = ((BackFileViewProvider)viewProvider).getFrontPsiFile();
+        if (psiFile == null) {
+          return List.of();
         }
       }
+
+      List<? extends TodoItem> items = findAllTodos(psiFile, myBuilder.getTodoTreeStructure().getSearchHelper());
+      List<TodoItemNode> children = new ArrayList<>(items.size());
+
+      Document document = PsiDocumentManager.getInstance(getProject()).getDocument(psiFile);
+      if (document == null) {
+        return List.of();
+      }
+
+      for (TodoItem todoItem : items) {
+        if (todoItem.getTextRange().getEndOffset() > document.getTextLength()) continue;
+
+        TodoFilter todoFilter = getToDoFilter();
+        if (todoFilter != null && !todoFilter.contains(todoItem.getPattern())) continue;
+
+        TodoItemNode node = new TodoItemNode(getProject(),
+                                             new SmartTodoItemPointer(todoItem, document),
+                                             myBuilder);
+        children.add(node);
+      }
+
+      children.sort(Comparator.comparingInt(TodoFileNode::getOffset));
+      return Collections.unmodifiableList(children);
     }
-    children.sort(SmartTodoItemPointerComparator.ourInstance);
-    return children;
+    catch (IndexNotReadyException e) {
+      return List.of();
+    }
   }
 
-  public static TodoItem[] findAllTodos(final PsiFile psiFile, final PsiTodoSearchHelper helper) {
-    final List<TodoItem> todoItems = new ArrayList<>(Arrays.asList(helper.findTodoItems(psiFile)));
+  public static @NotNull List<? extends TodoItem> findAllTodos(@NotNull PsiFile psiFile,
+                                                               @NotNull PsiTodoSearchHelper helper) {
+    List<TodoItem> todoItems = new ArrayList<>(Arrays.asList(helper.findTodoItems(psiFile)));
 
     psiFile.accept(new PsiRecursiveElementWalkingVisitor() {
       @Override
@@ -102,33 +109,7 @@ public final class TodoFileNode extends PsiFileNode {
         super.visitElement(element);
       }
     });
-    return todoItems.toArray(new TodoItem[0]);
-  }
-
-  private Collection<? extends AbstractTreeNode<?>> createGeneralList() {
-    List<TodoItemNode> children = new ArrayList<>();
-
-    PsiFile psiFile = getValue();
-    final TodoItem[] items = findAllTodos(psiFile, myBuilder.getTodoTreeStructure().getSearchHelper());
-    final Document document = PsiDocumentManager.getInstance(getProject()).getDocument(psiFile);
-
-    if (document != null) {
-      for (final TodoItem todoItem : items) {
-        if (todoItem.getTextRange().getEndOffset() < document.getTextLength() + 1) {
-          final SmartTodoItemPointer pointer = new SmartTodoItemPointer(todoItem, document);
-          TodoFilter todoFilter = getToDoFilter();
-          if (todoFilter != null) {
-            if (todoFilter.contains(todoItem.getPattern())) {
-              children.add(new TodoItemNode(getProject(), pointer, myBuilder));
-            }
-          } else {
-            children.add(new TodoItemNode(getProject(), pointer, myBuilder));
-          }
-        }
-      }
-    }
-    children.sort(SmartTodoItemPointerComparator.ourInstance);
-    return children;
+    return Collections.unmodifiableList(todoItems);
   }
 
   private TodoFilter getToDoFilter() {
@@ -144,10 +125,11 @@ public final class TodoFileNode extends PsiFileNode {
   protected void updateImpl(@NotNull PresentationData data) {
     super.updateImpl(data);
     String newName;
-    if(myBuilder.getTodoTreeStructure().isPackagesShown()){
-      newName=getValue().getName();
-    }else{
-      newName=mySingleFileMode ? getValue().getName() : getValue().getVirtualFile().getPresentableUrl();
+    if (myBuilder.getTodoTreeStructure().isPackagesShown()) {
+      newName = getValue().getName();
+    }
+    else {
+      newName = mySingleFileMode ? getValue().getName() : getValue().getVirtualFile().getPresentableUrl();
     }
 
     data.setPresentableText(newName);
@@ -166,5 +148,12 @@ public final class TodoFileNode extends PsiFileNode {
   @Override
   public int getWeight() {
     return 4;
+  }
+
+  private static int getOffset(@NotNull TodoItemNode node) {
+    return Objects.requireNonNull(node.getValue())
+      .getTodoItem()
+      .getTextRange()
+      .getStartOffset();
   }
 }

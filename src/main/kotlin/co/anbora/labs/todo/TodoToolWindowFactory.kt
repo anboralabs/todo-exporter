@@ -2,7 +2,6 @@
 package co.anbora.labs.todo
 
 import com.intellij.openapi.wm.ToolWindowFactory
-import co.anbora.labs.todo.TodoExporterView
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow

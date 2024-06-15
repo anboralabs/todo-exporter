@@ -1,9 +1,9 @@
-// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 
 package co.anbora.labs.todo.nodes;
 
-import com.intellij.ide.projectView.PresentationData;
 import co.anbora.labs.todo.TodoTreeBuilder;
+import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class SingleFileToDoNode extends BaseToDoNode<PsiFile>{
+public final class SingleFileToDoNode extends BaseToDoNode<PsiFile> {
   private final TodoFileNode myFileNode;
 
   public SingleFileToDoNode(Project project, @NotNull PsiFile value, TodoTreeBuilder builder) {

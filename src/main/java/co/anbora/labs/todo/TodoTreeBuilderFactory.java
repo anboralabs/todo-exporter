@@ -15,13 +15,11 @@
  */
 package co.anbora.labs.todo;
 
+import com.intellij.ide.todo.TodoTreeBuilder;
 import com.intellij.openapi.project.Project;
 
 import javax.swing.*;
 
-/**
- * @author irengrig
- */
 public interface TodoTreeBuilderFactory {
-  TodoTreeBuilder createTreeBuilder(JTree tree,Project project);
+  TodoTreeBuilder createTreeBuilder(JTree tree, Project project);
 }

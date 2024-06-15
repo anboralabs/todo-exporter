@@ -13,7 +13,8 @@ data class TodoExportItemNode(
     override fun toString(): String {
         val todoItemPointer = value!!
         val myRangeMarker = todoItemPointer.rangeMarker
-        val info = getNodeInfo(todoItemPointer, myRangeMarker)
-        return String.format("%s %s", info.document,info.newName)
+        // val info = getNodeInfo(todoItemPointer, myRangeMarker)
+        val info = presentation
+        return String.format("%s %s", todoItemPointer.document)
     }
 }

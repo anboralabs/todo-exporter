@@ -1,11 +1,11 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package co.anbora.labs.todo;
 
-import co.anbora.labs.todo.nodes.BaseToDoNode;
-import co.anbora.labs.todo.nodes.SummaryNode;
-import co.anbora.labs.todo.nodes.ToDoRootNode;
-import co.anbora.labs.todo.nodes.TodoTreeHelper;
 import com.intellij.ide.projectView.ProjectViewNode;
+import com.intellij.ide.todo.nodes.BaseToDoNode;
+import com.intellij.ide.todo.nodes.SummaryNode;
+import com.intellij.ide.todo.nodes.ToDoRootNode;
+import com.intellij.ide.todo.nodes.TodoTreeHelper;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.tree.AbstractTreeNodeVisitor;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
 
-class TodoNodeVisitor extends AbstractTreeNodeVisitor<Object> {
+final class TodoNodeVisitor extends AbstractTreeNodeVisitor<Object> {
   private final VirtualFile myFile;
 
   TodoNodeVisitor(@NotNull Supplier<Object> supplier, VirtualFile file) {

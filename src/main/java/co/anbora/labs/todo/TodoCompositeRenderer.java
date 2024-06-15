@@ -1,8 +1,10 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package co.anbora.labs.todo;
 
-import co.anbora.labs.todo.nodes.SummaryNode;
-import co.anbora.labs.todo.nodes.TodoItemNode;
+import com.intellij.ide.todo.HighlightedRegionProvider;
+import com.intellij.ide.todo.MultiLineTodoRenderer;
+import com.intellij.ide.todo.nodes.SummaryNode;
+import com.intellij.ide.todo.nodes.TodoItemNode;
 import com.intellij.ide.util.treeView.NodeDescriptor;
 import com.intellij.ide.util.treeView.NodeRenderer;
 import com.intellij.ui.HighlightableCellRenderer;
@@ -20,7 +22,7 @@ import java.awt.*;
 final class TodoCompositeRenderer implements TreeCellRenderer {
   private final NodeRenderer myNodeRenderer;
   private final HighlightableCellRenderer myColorTreeCellRenderer;
-  private final MultiLineTodoRenderer myMultiLineRenderer;
+  private final com.intellij.ide.todo.MultiLineTodoRenderer myMultiLineRenderer;
 
   TodoCompositeRenderer() {
     myNodeRenderer = new NodeRenderer();
@@ -43,9 +45,7 @@ final class TodoCompositeRenderer implements TreeCellRenderer {
       myMultiLineRenderer.getTreeCellRendererComponent(tree, obj, selected, expanded, leaf, row, hasFocus);
       result = myMultiLineRenderer;
     }
-    else if (userObject instanceof NodeDescriptor && userObject instanceof HighlightedRegionProvider) {
-      NodeDescriptor descriptor = (NodeDescriptor)userObject;
-      HighlightedRegionProvider regionProvider = (HighlightedRegionProvider)userObject;
+    else if (userObject instanceof NodeDescriptor descriptor && userObject instanceof HighlightedRegionProvider regionProvider) {
       myColorTreeCellRenderer.getTreeCellRendererComponent(tree, obj, selected, expanded, leaf, row, hasFocus);
       for (HighlightedRegion region : regionProvider.getHighlightedRegions()) {
         myColorTreeCellRenderer.addHighlighter(region.startOffset, region.endOffset, region.textAttributes);

@@ -2,13 +2,13 @@
 
 package co.anbora.labs.todo.nodes;
 
+import co.anbora.labs.todo.TodoTreeBuilder;
+import co.anbora.labs.todo.TodoTreeStructure;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.ProjectRootsUtil;
 import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode;
-import co.anbora.labs.todo.TodoTreeBuilder;
-import co.anbora.labs.todo.TodoTreeStructure;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;

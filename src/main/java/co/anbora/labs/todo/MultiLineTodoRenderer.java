@@ -1,8 +1,9 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package co.anbora.labs.todo;
 
 import com.intellij.ide.IdeBundle;
-import co.anbora.labs.todo.nodes.TodoItemNode;
+import com.intellij.ide.todo.HighlightedRegionProvider;
+import com.intellij.ide.todo.nodes.TodoItemNode;
 import com.intellij.ui.HighlightableCellRenderer;
 import com.intellij.ui.HighlightedRegion;
 
@@ -12,7 +13,7 @@ import javax.swing.tree.TreeCellRenderer;
 import java.awt.*;
 import java.util.List;
 
-public class MultiLineTodoRenderer extends JPanel implements TreeCellRenderer {
+public final class MultiLineTodoRenderer extends JPanel implements TreeCellRenderer {
   private static final int MAX_DISPLAYED_LINES = 10;
 
   private final HighlightableCellRenderer myPrefixRenderer;
@@ -50,7 +51,7 @@ public class MultiLineTodoRenderer extends JPanel implements TreeCellRenderer {
     myPrefixRenderer.getTreeCellRendererComponent(tree, text.substring(0, contentStartPos), selected, expanded, leaf, row, hasFocus);
     myPrefixRenderer.setIcon(node.getIcon());
 
-    List<HighlightedRegionProvider> additionalLines = node.getAdditionalLines();
+    List<com.intellij.ide.todo.HighlightedRegionProvider> additionalLines = node.getAdditionalLines();
     for (int i = 0; i < MAX_DISPLAYED_LINES; i++) {
       if (i > additionalLines.size()) {
         myLineRenderers[i].setVisible(false);

@@ -33,16 +33,15 @@ import com.intellij.ui.content.ContentManagerListener;
 import com.intellij.util.messages.MessageBusConnection;
 import com.intellij.util.xmlb.annotations.Attribute;
 import com.intellij.util.xmlb.annotations.OptionTag;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.TestOnly;
-
-import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 
 @State(name = "TodoExporterView",
        storages = @Storage(StoragePathMacros.PRODUCT_WORKSPACE_FILE))
@@ -261,8 +260,7 @@ public class TodoExporterView
     }
   }
 
-  private static final class MyFileTypeListener implements FileTypeListener {
-  }
+  private static final class MyFileTypeListener implements FileTypeListener {}
 
   private final class MyVisibilityListener
       implements ToolWindowManagerListener, ContentManagerListener {

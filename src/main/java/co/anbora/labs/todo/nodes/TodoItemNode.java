@@ -1,4 +1,5 @@
-// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by
+// the Apache 2.0 license that can be found in the LICENSE file.
 
 package co.anbora.labs.todo.nodes;
 
@@ -23,20 +24,19 @@ import com.intellij.ui.HighlightedRegion;
 import com.intellij.ui.IconManager;
 import com.intellij.ui.PlatformIcons;
 import com.intellij.util.text.CharArrayUtil;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import javax.swing.*;
+import org.jetbrains.annotations.NotNull;
 
-public class TodoItemNode extends BaseToDoNode<SmartTodoItemPointer> implements HighlightedRegionProvider {
+public class TodoItemNode extends BaseToDoNode<SmartTodoItemPointer>
+    implements HighlightedRegionProvider {
   private static final Logger LOG = Logger.getInstance(TodoItem.class);
 
-  public TodoItemNode(Project project,
-                      @NotNull SmartTodoItemPointer value,
+  public TodoItemNode(Project project, @NotNull SmartTodoItemPointer value,
                       TodoTreeBuilder builder) {
     super(project, value, builder);
     RangeMarker rangeMarker = value.getRangeMarker();
@@ -72,7 +72,9 @@ public class TodoItemNode extends BaseToDoNode<SmartTodoItemPointer> implements 
 
   @Override
   public List<HighlightedRegion> getHighlightedRegions() {
-    return Collections.unmodifiableList(((TodoItemNodePresentationData)getPresentation()).getHighlightedRegions());
+    return Collections.unmodifiableList(
+        ((TodoItemNodePresentationData)getPresentation())
+            .getHighlightedRegions());
   }
 
   @Override
@@ -87,14 +89,19 @@ public class TodoItemNode extends BaseToDoNode<SmartTodoItemPointer> implements 
     assert todoItemPointer != null;
     TodoItem todoItem = todoItemPointer.getTodoItem();
     RangeMarker myRangeMarker = todoItemPointer.getRangeMarker();
-    if (!todoItem.getFile().isValid() || !myRangeMarker.isValid() || myRangeMarker.getStartOffset() == myRangeMarker.getEndOffset()) {
+    if (!todoItem.getFile().isValid() || !myRangeMarker.isValid() ||
+        myRangeMarker.getStartOffset() == myRangeMarker.getEndOffset()) {
       myRangeMarker.dispose();
       setValue(null);
       return;
     }
 
-    @NotNull List<HighlightedRegion> myHighlightedRegions = ((TodoItemNodePresentationData) presentation).getHighlightedRegions();
-    @NotNull List<HighlightedRegionProvider> myAdditionalLines = ((TodoItemNodePresentationData) presentation).getAdditionalLines();
+    @NotNull
+    List<HighlightedRegion> myHighlightedRegions =
+        ((TodoItemNodePresentationData)presentation).getHighlightedRegions();
+    @NotNull
+    List<HighlightedRegionProvider> myAdditionalLines =
+        ((TodoItemNodePresentationData)presentation).getAdditionalLines();
     myHighlightedRegions.clear();
     myAdditionalLines.clear();
 
@@ -110,70 +117,87 @@ public class TodoItemNode extends BaseToDoNode<SmartTodoItemPointer> implements 
 
     // skip all white space characters
 
-    while (lineStartOffset < document.getTextLength() && (chars.charAt(lineStartOffset) == '\t' || chars.charAt(lineStartOffset) == ' ')) {
+    while (lineStartOffset < document.getTextLength() &&
+           (chars.charAt(lineStartOffset) == '\t' ||
+            chars.charAt(lineStartOffset) == ' ')) {
       lineStartOffset++;
     }
 
     int lineEndOffset = document.getLineEndOffset(lineNumber);
 
-    String lineColumnPrefix = "(" + (lineNumber + 1) + ", " + (columnNumber + 1) + ") ";
+    String lineColumnPrefix =
+        "(" + (lineNumber + 1) + ", " + (columnNumber + 1) + ") ";
 
-    String highlightedText = chars.subSequence(lineStartOffset, Math.min(lineEndOffset, chars.length())).toString();
+    String highlightedText =
+        chars
+            .subSequence(lineStartOffset,
+                         Math.min(lineEndOffset, chars.length()))
+            .toString();
 
     String newName = lineColumnPrefix + highlightedText;
 
     // Update icon
 
     TodoPattern pattern = todoItem.getPattern();
-    Icon newIcon =
-      pattern != null ? pattern.getAttributes().getIcon() : IconManager.getInstance().getPlatformIcon(PlatformIcons.TodoDefault);
+    Icon newIcon = pattern != null ? pattern.getAttributes().getIcon()
+                                   : IconManager.getInstance().getPlatformIcon(
+                                         PlatformIcons.TodoDefault);
 
     // Update highlighted regions
 
     myHighlightedRegions.clear();
-    EditorHighlighter highlighter = myBuilder.getHighlighter(todoItem.getFile(), document);
-    collectHighlights(myHighlightedRegions, highlighter, lineStartOffset, lineEndOffset, lineColumnPrefix.length());
+    EditorHighlighter highlighter =
+        myBuilder.getHighlighter(todoItem.getFile(), document);
+    collectHighlights(myHighlightedRegions, highlighter, lineStartOffset,
+                      lineEndOffset, lineColumnPrefix.length());
     TextAttributes attributes =
-      pattern != null ? pattern.getAttributes().getTextAttributes() : TodoAttributesUtil.getDefaultColorSchemeTextAttributes();
+        pattern != null
+            ? pattern.getAttributes().getTextAttributes()
+            : TodoAttributesUtil.getDefaultColorSchemeTextAttributes();
     myHighlightedRegions.add(new HighlightedRegion(
-      lineColumnPrefix.length() + startOffset - lineStartOffset,
-      lineColumnPrefix.length() + endOffset - lineStartOffset,
-      attributes
-    ));
+        lineColumnPrefix.length() + startOffset - lineStartOffset,
+        lineColumnPrefix.length() + endOffset - lineStartOffset, attributes));
 
     //
 
     presentation.setPresentableText(newName);
     presentation.setIcon(newIcon);
 
-    for (RangeMarker additionalMarker : todoItemPointer.getAdditionalRangeMarkers()) {
-      if (!additionalMarker.isValid()) break;
+    for (RangeMarker additionalMarker :
+         todoItemPointer.getAdditionalRangeMarkers()) {
+      if (!additionalMarker.isValid())
+        break;
       ArrayList<HighlightedRegion> highlights = new ArrayList<>();
       int lineNum = document.getLineNumber(additionalMarker.getStartOffset());
       int lineStart = document.getLineStartOffset(lineNum);
       int lineEnd = document.getLineEndOffset(lineNum);
       int lineStartNonWs = CharArrayUtil.shiftForward(chars, lineStart, " \t");
-      if (lineStartNonWs > additionalMarker.getStartOffset() || lineEnd < additionalMarker.getEndOffset()) {
-        // can happen for an invalid (obsolete) node, tree implementation can call this method for such a node
+      if (lineStartNonWs > additionalMarker.getStartOffset() ||
+          lineEnd < additionalMarker.getEndOffset()) {
+        // can happen for an invalid (obsolete) node, tree implementation can
+        // call this method for such a node
         break;
       }
       collectHighlights(highlights, highlighter, lineStartNonWs, lineEnd, 0);
       highlights.add(new HighlightedRegion(
-        additionalMarker.getStartOffset() - lineStartNonWs,
-        additionalMarker.getEndOffset() - lineStartNonWs,
-        attributes
-      ));
-      myAdditionalLines.add(new AdditionalTodoLine(document.getText(new TextRange(lineStartNonWs, lineEnd)), highlights));
+          additionalMarker.getStartOffset() - lineStartNonWs,
+          additionalMarker.getEndOffset() - lineStartNonWs, attributes));
+      myAdditionalLines.add(new AdditionalTodoLine(
+          document.getText(new TextRange(lineStartNonWs, lineEnd)),
+          highlights));
     }
   }
 
-  private static void collectHighlights(@NotNull List<? super HighlightedRegion> highlights, @NotNull EditorHighlighter highlighter,
-                                        int startOffset, int endOffset, int highlightOffsetShift) {
+  private static void
+  collectHighlights(@NotNull List<? super HighlightedRegion> highlights,
+                    @NotNull EditorHighlighter highlighter, int startOffset,
+                    int endOffset, int highlightOffsetShift) {
     HighlighterIterator iterator = highlighter.createIterator(startOffset);
     while (!iterator.atEnd()) {
       int start = Math.max(iterator.getStart(), startOffset);
       int end = Math.min(iterator.getEnd(), endOffset);
-      if (start >= endOffset) break;
+      if (start >= endOffset)
+        break;
 
       TextAttributes attributes = iterator.getTextAttributes();
       int fontType = attributes.getFontType();
@@ -182,10 +206,8 @@ public class TodoItemNode extends BaseToDoNode<SmartTodoItemPointer> implements 
         attributes.setFontType(fontType & ~Font.BOLD);
       }
       HighlightedRegion region = new HighlightedRegion(
-        highlightOffsetShift + start - startOffset,
-        highlightOffsetShift + end - startOffset,
-        attributes
-      );
+          highlightOffsetShift + start - startOffset,
+          highlightOffsetShift + end - startOffset, attributes);
       highlights.add(region);
       iterator.advance();
     }
@@ -203,14 +225,17 @@ public class TodoItemNode extends BaseToDoNode<SmartTodoItemPointer> implements 
 
   @NotNull
   public List<HighlightedRegionProvider> getAdditionalLines() {
-    return Collections.unmodifiableList(((TodoItemNodePresentationData)getPresentation()).getAdditionalLines());
+    return Collections.unmodifiableList(
+        ((TodoItemNodePresentationData)getPresentation()).getAdditionalLines());
   }
 
-  private static final class AdditionalTodoLine implements HighlightedRegionProvider {
+  private static final class AdditionalTodoLine
+      implements HighlightedRegionProvider {
     private final String myText;
     private final List<HighlightedRegion> myHighlights;
 
-    private AdditionalTodoLine(String text, List<HighlightedRegion> highlights) {
+    private AdditionalTodoLine(String text,
+                               List<HighlightedRegion> highlights) {
       myText = text;
       myHighlights = highlights;
     }

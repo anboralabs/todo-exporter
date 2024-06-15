@@ -29,14 +29,13 @@ import org.jetbrains.annotations.Nullable;
 
 public final class CurrentFileTodosTreeStructure extends TodoTreeStructure {
   /**
-   * Current {@code VirtualFile} for which the structure is built. If {@code myFile} is {@code null}
-   * then the structure is empty (contains only root node).
+   * Current {@code VirtualFile} for which the structure is built. If {@code
+   * myFile} is {@code null} then the structure is empty (contains only root
+   * node).
    */
   private PsiFile myFile;
 
-  public CurrentFileTodosTreeStructure(Project project) {
-    super(project);
-  }
+  public CurrentFileTodosTreeStructure(Project project) { super(project); }
 
   @Override
   protected void validateCache() {
@@ -45,8 +44,7 @@ public final class CurrentFileTodosTreeStructure extends TodoTreeStructure {
       VirtualFile vFile = myFile.getVirtualFile();
       if (vFile.isValid()) {
         myFile = PsiManager.getInstance(myProject).findFile(vFile);
-      }
-      else {
+      } else {
         myFile = null;
       }
     }
@@ -58,8 +56,8 @@ public final class CurrentFileTodosTreeStructure extends TodoTreeStructure {
   }
 
   /**
-   * Sets {@code file} for which the structure is built. Alter this method is invoked caches should
-   * be validated.
+   * Sets {@code file} for which the structure is built. Alter this method is
+   * invoked caches should be validated.
    */
   public void setFile(@Nullable PsiFile file) {
     myFile = file;
@@ -82,8 +80,7 @@ public final class CurrentFileTodosTreeStructure extends TodoTreeStructure {
     }
     if (element == myFile) {
       return true;
-    }
-    else {
+    } else {
       return element == getRootElement() || element == mySummaryElement;
     }
   }
@@ -92,8 +89,7 @@ public final class CurrentFileTodosTreeStructure extends TodoTreeStructure {
   Object getFirstSelectableElement() {
     if (myRootElement instanceof SingleFileToDoNode) {
       return ((SingleFileToDoNode)myRootElement).getFileNode();
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -101,9 +97,9 @@ public final class CurrentFileTodosTreeStructure extends TodoTreeStructure {
   @Override
   protected AbstractTreeNode createRootElement() {
     if (myFile == null) {
-      return new ToDoRootNode(myProject, new Object(), myBuilder, mySummaryElement);
-    }
-    else {
+      return new ToDoRootNode(myProject, new Object(), myBuilder,
+                              mySummaryElement);
+    } else {
       return new SingleFileToDoNode(myProject, myFile, myBuilder);
     }
   }

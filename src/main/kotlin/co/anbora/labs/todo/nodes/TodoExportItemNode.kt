@@ -12,9 +12,11 @@ data class TodoExportItemNode(
 
     override fun toString(): String {
         val todoItemPointer = value!!
-        val myRangeMarker = todoItemPointer.rangeMarker
-        // val info = getNodeInfo(todoItemPointer, myRangeMarker)
-        val info = presentation
-        return String.format("%s %s", todoItemPointer.document)
+        update(presentation)
+        val info = todoItemPointer.todoItem
+        val path = info.file.virtualFile.toNioPath()
+        val details = presentation.presentableText
+        val fileName = info.file.name
+        return String.format("%s %s %s", path, details, fileName)
     }
 }

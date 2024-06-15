@@ -63,10 +63,8 @@ public final class ExportToFileUtil {
     exporter.exportedTo(dlg.getFileName());
 
     Notification notification = LinterNotifications.createNotification(
-            "TODO Exporter",
-            "Exported todos in file",
-            NotificationType.INFORMATION
-    );
+        "TODO Exporter", "Exported todos in file",
+        NotificationType.INFORMATION);
     LinterNotifications.showNotification(notification, project);
   }
 

@@ -1,4 +1,5 @@
-// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source
+// code is governed by the Apache 2.0 license.
 
 package co.anbora.labs.todo;
 
@@ -10,12 +11,11 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.content.Content;
 import com.intellij.util.Alarm;
 import com.intellij.util.ui.JBUI;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
+import org.jetbrains.annotations.NotNull;
 
 public final class ScopeBasedTodosPanel extends TodoPanel {
 
@@ -46,16 +46,16 @@ public final class ScopeBasedTodosPanel extends TodoPanel {
     String preselect = myTodoView.getState().selectedScope;
     myScopes = new ScopeChooserCombo(myProject, false, true, preselect);
     Disposer.register(this, myScopes);
-    
+
     myScopes.setCurrentSelection(false);
     myScopes.setUsageView(false);
 
     JPanel chooserPanel = new JPanel(new GridBagLayout());
     final JLabel scopesLabel = new JLabel(IdeBundle.message("label.scope"));
     scopesLabel.setLabelFor(myScopes);
-    final GridBagConstraints gc =
-      new GridBagConstraints(GridBagConstraints.RELATIVE, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-                             JBUI.insets(2, 8, 2, 4), 0, 0);
+    final GridBagConstraints gc = new GridBagConstraints(
+        GridBagConstraints.RELATIVE, 0, 1, 1, 0, 0, GridBagConstraints.WEST,
+        GridBagConstraints.NONE, JBUI.insets(2, 8, 2, 4), 0, 0);
     chooserPanel.add(scopesLabel, gc);
     gc.insets = JBUI.insets(2);
     chooserPanel.add(myScopes, gc);
@@ -68,9 +68,10 @@ public final class ScopeBasedTodosPanel extends TodoPanel {
   }
 
   @Override
-  protected @NotNull TodoTreeBuilder createTreeBuilder(@NotNull JTree tree,
-                                                       @NotNull Project project) {
-    ScopeBasedTodosTreeBuilder builder = new ScopeBasedTodosTreeBuilder(tree, project, myScopes);
+  protected @NotNull TodoTreeBuilder
+  createTreeBuilder(@NotNull JTree tree, @NotNull Project project) {
+    ScopeBasedTodosTreeBuilder builder =
+        new ScopeBasedTodosTreeBuilder(tree, project, myScopes);
     builder.init();
     return builder;
   }

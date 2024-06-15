@@ -8,12 +8,10 @@ import com.intellij.ide.todo.TodoPanelSettings;
 import com.intellij.lang.LangBundle;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.application.ReadConstraint;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.fileTypes.FileTypeEvent;
 import com.intellij.openapi.fileTypes.FileTypeListener;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
@@ -27,7 +25,11 @@ import com.intellij.openapi.wm.ex.ToolWindowEx;
 import com.intellij.openapi.wm.ex.ToolWindowManagerListener;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.ui.IdeUICustomization;
-import com.intellij.ui.content.*;
+import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentFactory;
+import com.intellij.ui.content.ContentManager;
+import com.intellij.ui.content.ContentManagerEvent;
+import com.intellij.ui.content.ContentManagerListener;
 import com.intellij.util.messages.MessageBusConnection;
 import com.intellij.util.xmlb.annotations.Attribute;
 import com.intellij.util.xmlb.annotations.OptionTag;
@@ -35,9 +37,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 
 @State(name = "TodoExporterView",
        storages = @Storage(StoragePathMacros.PRODUCT_WORKSPACE_FILE))
@@ -256,12 +260,7 @@ public class TodoExporterView
     }
   }
 
-  private final class MyFileTypeListener implements FileTypeListener {
-    @Override
-    public void fileTypesChanged(@NotNull FileTypeEvent e) {
-      refresh();
-    }
-  }
+  private static final class MyFileTypeListener implements FileTypeListener {}
 
   private final class MyVisibilityListener
       implements ToolWindowManagerListener, ContentManagerListener {
@@ -292,23 +291,6 @@ public class TodoExporterView
         .map(TodoPanel::getTreeBuilder)
         .map(TodoTreeBuilder::getCoroutineHelper)
         .forEach(x -> x.scheduleMarkFilesAsDirtyAndUpdateTree(files));
-  }
-
-  @VisibleForTesting
-  public final @NotNull CompletableFuture<Void> refresh() {
-    if (myAllTodos == null) {
-      return CompletableFuture.completedFuture(null);
-    }
-
-    ReadConstraint inSmartMode =
-        ReadConstraint.Companion.inSmartMode(myProject);
-    CompletableFuture<?>[] futures =
-        myPanels.stream()
-            .map(TodoPanel::getTreeBuilder)
-            .map(TodoTreeBuilder::getCoroutineHelper)
-            .map(helper -> helper.scheduleCacheAndTreeUpdate(inSmartMode))
-            .toArray(CompletableFuture[] ::new);
-    return CompletableFuture.allOf(futures);
   }
 
   @Nullable

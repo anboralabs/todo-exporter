@@ -19,7 +19,7 @@
     <actions>
         <group id="TodoExporterMainGroup">
             <add-to-group group-id="Other.KeymapGroup"/>
-            <group id="TodoExporterViewGroupByGroup" class="co.anbora.labs.todo.TodoPanel$GroupByActionGroup" icon="AllIcons.Actions.GroupBy"
+            <group id="TodoExporterViewGroupByGroup" icon="AllIcons.Actions.GroupBy"
                    popup="true">
                 <separator text="Group By"/>
                 <action class="co.anbora.labs.todo.TodoPanel$MyShowModulesAction" id="TodoExporterViewGroupByShowModules"/>

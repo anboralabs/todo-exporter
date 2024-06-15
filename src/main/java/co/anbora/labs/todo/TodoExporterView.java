@@ -188,8 +188,8 @@ public class TodoExporterView implements PersistentStateComponent<TodoExporterVi
     myContentManager = toolWindow.getContentManager();
 
     myContentManager.addContent(allTodosContent);
-    myContentManager.addContent(currentFileTodosContent);
-    myContentManager.addContent(scopeBasedTodoContent);
+    //myContentManager.addContent(currentFileTodosContent);
+    //myContentManager.addContent(scopeBasedTodoContent);
 
     if (myChangesSupport.isContentVisible(myProject)) {
       myChangesListener.setVisible(true);

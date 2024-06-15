@@ -1,4 +1,5 @@
-// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source
+// code is governed by the Apache 2.0 license.
 
 package co.anbora.labs.todo.nodes;
 
@@ -17,15 +18,15 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.TodoItem;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import org.jetbrains.annotations.NotNull;
 
 public final class ModuleToDoNode extends BaseToDoNode<Module> {
 
-  public ModuleToDoNode(Project project, @NotNull Module value, TodoTreeBuilder builder) {
+  public ModuleToDoNode(Project project, @NotNull Module value,
+                        TodoTreeBuilder builder) {
     super(project, value, builder);
   }
 
@@ -33,19 +34,25 @@ public final class ModuleToDoNode extends BaseToDoNode<Module> {
   public @NotNull Collection<? extends AbstractTreeNode<?>> getChildren() {
     ArrayList<AbstractTreeNode<?>> children = new ArrayList<>();
     if (myToDoSettings.getIsPackagesShown()) {
-      TodoTreeHelper.getInstance(getProject()).addPackagesToChildren(children, getValue(), myBuilder);
-    }
-    else {
-      for (Iterator<? extends PsiFile> i = myBuilder.getAllFiles(); i.hasNext(); ) {
+      TodoTreeHelper.getInstance(getProject())
+          .addPackagesToChildren(children, getValue(), myBuilder);
+    } else {
+      for (Iterator<? extends PsiFile> i = myBuilder.getAllFiles();
+           i.hasNext();) {
         final PsiFile psiFile = i.next();
         if (psiFile == null) { // skip invalid PSI files
           continue;
         }
         final VirtualFile virtualFile = psiFile.getVirtualFile();
-        final boolean isInContent = ModuleRootManager.getInstance(getValue()).getFileIndex().isInContent(virtualFile);
-        if (!isInContent) continue;
-        TodoFileNode fileNode = new TodoFileNode(getProject(), psiFile, myBuilder, false);
-        if (getTreeStructure().accept(psiFile) && !children.contains(fileNode)) {
+        final boolean isInContent = ModuleRootManager.getInstance(getValue())
+                                        .getFileIndex()
+                                        .isInContent(virtualFile);
+        if (!isInContent)
+          continue;
+        TodoFileNode fileNode =
+            new TodoFileNode(getProject(), psiFile, myBuilder, false);
+        if (getTreeStructure().accept(psiFile) &&
+            !children.contains(fileNode)) {
           children.add(fileNode);
         }
       }
@@ -56,12 +63,14 @@ public final class ModuleToDoNode extends BaseToDoNode<Module> {
   @Override
   public boolean contains(Object element) {
     if (element instanceof TodoItem) {
-      Module module = ModuleUtilCore.findModuleForFile(((TodoItem)element).getFile());
+      Module module =
+          ModuleUtilCore.findModuleForFile(((TodoItem)element).getFile());
       return super.canRepresent(module);
     }
 
     if (element instanceof PsiElement) {
-      Module module = ModuleUtilCore.findModuleForPsiElement((PsiElement)element);
+      Module module =
+          ModuleUtilCore.findModuleForPsiElement((PsiElement)element);
       return super.canRepresent(module);
     }
     return super.canRepresent(element);
@@ -75,7 +84,8 @@ public final class ModuleToDoNode extends BaseToDoNode<Module> {
   public void update(@NotNull PresentationData presentation) {
     String newName = getValue().getName();
     int todoItemCount = getTodoItemCount(getValue());
-    presentation.setLocationString(IdeBundle.message("node.todo.group", todoItemCount));
+    presentation.setLocationString(
+        IdeBundle.message("node.todo.group", todoItemCount));
     presentation.setIcon(ModuleType.get(getValue()).getIcon());
     presentation.setPresentableText(newName);
   }
@@ -104,7 +114,8 @@ public final class ModuleToDoNode extends BaseToDoNode<Module> {
     int count = 0;
     while (iterator.hasNext()) {
       final PsiFile psiFile = iterator.next();
-      count += ReadAction.compute(() -> getTreeStructure().getTodoItemCount(psiFile));
+      count += ReadAction.compute(
+          () -> getTreeStructure().getTodoItemCount(psiFile));
     }
     return count;
   }

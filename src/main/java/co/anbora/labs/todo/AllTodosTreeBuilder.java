@@ -17,14 +17,12 @@
 package co.anbora.labs.todo;
 
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
-
 import javax.swing.*;
+import org.jetbrains.annotations.NotNull;
 
 public class AllTodosTreeBuilder extends TodoTreeBuilder {
 
-  public AllTodosTreeBuilder(@NotNull JTree tree,
-                             @NotNull Project project) {
+  public AllTodosTreeBuilder(@NotNull JTree tree, @NotNull Project project) {
     super(tree, project);
   }
 

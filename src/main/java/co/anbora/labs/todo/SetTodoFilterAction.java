@@ -1,4 +1,5 @@
-// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source
+// code is governed by the Apache 2.0 license.
 package co.anbora.labs.todo;
 
 import com.intellij.ConfigurableFactory;
@@ -15,20 +16,21 @@ import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NlsActions;
 import com.intellij.util.Consumer;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
-public final class SetTodoFilterAction extends ActionGroup implements DumbAware {
+public final class SetTodoFilterAction
+    extends ActionGroup implements DumbAware {
   private final Project myProject;
   private final TodoPanelSettings myToDoSettings;
   private final Consumer<? super TodoFilter> myTodoFilterConsumer;
 
-  public SetTodoFilterAction(@NotNull Project project,
-                             @NotNull TodoPanelSettings toDoSettings,
-                             @NotNull Consumer<? super TodoFilter> todoFilterConsumer) {
-    super(IdeBundle.message("action.filter.todo.items"), null, AllIcons.General.Filter);
+  public SetTodoFilterAction(
+      @NotNull Project project, @NotNull TodoPanelSettings toDoSettings,
+      @NotNull Consumer<? super TodoFilter> todoFilterConsumer) {
+    super(IdeBundle.message("action.filter.todo.items"), null,
+          AllIcons.General.Filter);
     setPopup(true);
     myProject = project;
     myToDoSettings = toDoSettings;
@@ -36,44 +38,54 @@ public final class SetTodoFilterAction extends ActionGroup implements DumbAware 
   }
 
   @Override
-  public AnAction @NotNull [] getChildren(@Nullable AnActionEvent e) {
-    return createPopupActionGroup(myProject, myToDoSettings, false, myTodoFilterConsumer).getChildren(e);
+  public AnAction @NotNull[] getChildren(@Nullable AnActionEvent e) {
+    return createPopupActionGroup(myProject, myToDoSettings, false,
+                                  myTodoFilterConsumer)
+        .getChildren(e);
   }
 
-  public static DefaultActionGroup createPopupActionGroup(@NotNull Project project,
-                                                          @NotNull TodoPanelSettings settings,
-                                                          boolean skipShowAllWithoutFilters,
-                                                          @NotNull Consumer<? super TodoFilter> todoFilterConsumer) {
+  public static DefaultActionGroup createPopupActionGroup(
+      @NotNull Project project, @NotNull TodoPanelSettings settings,
+      boolean skipShowAllWithoutFilters,
+      @NotNull Consumer<? super TodoFilter> todoFilterConsumer) {
     TodoFilter[] filters = TodoConfiguration.getInstance().getTodoFilters();
     DefaultActionGroup group = new DefaultActionGroup();
     if (!skipShowAllWithoutFilters || filters.length != 0) {
-      group.add(new TodoFilterApplier(IdeBundle.message("action.todo.show.all"),
-                                      IdeBundle.message("action.description.todo.show.all"), null, settings, todoFilterConsumer));
+      group.add(new TodoFilterApplier(
+          IdeBundle.message("action.todo.show.all"),
+          IdeBundle.message("action.description.todo.show.all"), null, settings,
+          todoFilterConsumer));
     }
     for (TodoFilter filter : filters) {
-      group.add(new TodoFilterApplier(filter.getName(), null, filter, settings, todoFilterConsumer));
+      group.add(new TodoFilterApplier(filter.getName(), null, filter, settings,
+                                      todoFilterConsumer));
     }
     group.addSeparator();
-    group.add(new DumbAwareAction(IdeBundle.messagePointer("action.todo.edit.filters"),
-                                  IdeBundle.messagePointer("action.todo.edit.filters.description"), AllIcons.General.Settings) {
-                @Override
-                public void actionPerformed(@NotNull AnActionEvent e) {
-                  TodoConfigurable todoConfigurable = ConfigurableFactory.Companion.getInstance().getTodoConfigurable(project);
+    group.add(new DumbAwareAction(
+        IdeBundle.messagePointer("action.todo.edit.filters"),
+        IdeBundle.messagePointer("action.todo.edit.filters.description"),
+        AllIcons.General.Settings) {
+      @Override
+      public void actionPerformed(@NotNull AnActionEvent e) {
+        TodoConfigurable todoConfigurable =
+            ConfigurableFactory.Companion.getInstance().getTodoConfigurable(
+                project);
 
-                  // Rider overrides the result of the method [getTodoConfigurable]
-                  if (todoConfigurable.getClass().equals(TodoConfigurable.class)) {
-                    ShowSettingsUtil.getInstance().showSettingsDialog(project, TodoConfigurable.class);
-                  }
-                  else {
-                    ShowSettingsUtil.getInstance().editConfigurable(project, todoConfigurable);
-                  }
-                }
-              }
-    );
+        // Rider overrides the result of the method [getTodoConfigurable]
+        if (todoConfigurable.getClass().equals(TodoConfigurable.class)) {
+          ShowSettingsUtil.getInstance().showSettingsDialog(
+              project, TodoConfigurable.class);
+        } else {
+          ShowSettingsUtil.getInstance().editConfigurable(project,
+                                                          todoConfigurable);
+        }
+      }
+    });
     return group;
   }
 
-  private static final class TodoFilterApplier extends ToggleAction implements DumbAware {
+  private static final class TodoFilterApplier
+      extends ToggleAction implements DumbAware {
     private final TodoFilter myFilter;
     private final TodoPanelSettings mySettings;
     private final Consumer<? super TodoFilter> myTodoFilterConsumer;
@@ -81,12 +93,12 @@ public final class SetTodoFilterAction extends ActionGroup implements DumbAware 
     /**
      * @param text        action's text.
      * @param description action's description.
-     * @param filter      filter to be applied. {@code null} value means "empty" filter.
+     * @param filter      filter to be applied. {@code null} value means "empty"
+     *     filter.
      */
     TodoFilterApplier(@NlsActions.ActionText String text,
                       @NlsActions.ActionDescription String description,
-                      TodoFilter filter,
-                      TodoPanelSettings settings,
+                      TodoFilter filter, TodoPanelSettings settings,
                       Consumer<? super TodoFilter> todoFilterConsumer) {
       super(null, description, null);
       mySettings = settings;

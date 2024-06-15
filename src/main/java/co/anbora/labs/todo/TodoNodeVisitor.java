@@ -1,4 +1,5 @@
-// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source
+// code is governed by the Apache 2.0 license.
 package co.anbora.labs.todo;
 
 import com.intellij.ide.projectView.ProjectViewNode;
@@ -9,10 +10,8 @@ import com.intellij.ide.todo.nodes.TodoTreeHelper;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.tree.AbstractTreeNodeVisitor;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.function.Supplier;
-
+import org.jetbrains.annotations.NotNull;
 
 final class TodoNodeVisitor extends AbstractTreeNodeVisitor<Object> {
   private final VirtualFile myFile;
@@ -23,14 +22,19 @@ final class TodoNodeVisitor extends AbstractTreeNodeVisitor<Object> {
   }
 
   @Override
-  protected boolean contains(@NotNull AbstractTreeNode node, @NotNull Object element) {
-    if (node instanceof SummaryNode || node instanceof ToDoRootNode) return true;
+  protected boolean contains(@NotNull AbstractTreeNode node,
+                             @NotNull Object element) {
+    if (node instanceof SummaryNode || node instanceof ToDoRootNode)
+      return true;
     if (node instanceof ProjectViewNode) {
       if (myFile == null) {
-        return TodoTreeHelper.getInstance(node.getProject()).contains((ProjectViewNode)node, element);
+        return TodoTreeHelper.getInstance(node.getProject())
+            .contains((ProjectViewNode)node, element);
       }
     }
-    return node instanceof BaseToDoNode && ((BaseToDoNode<?>)node).contains(element) ||
-           node instanceof ProjectViewNode && ((ProjectViewNode<?>)node).contains(myFile);
+    return node instanceof BaseToDoNode &&
+        ((BaseToDoNode<?>)node).contains(element) ||
+        node instanceof ProjectViewNode &&
+            ((ProjectViewNode<?>)node).contains(myFile);
   }
 }

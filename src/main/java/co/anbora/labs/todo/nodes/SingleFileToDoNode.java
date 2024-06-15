@@ -1,4 +1,5 @@
-// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source
+// code is governed by the Apache 2.0 license.
 
 package co.anbora.labs.todo.nodes;
 
@@ -8,16 +9,16 @@ import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.TodoItem;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import org.jetbrains.annotations.NotNull;
 
 public final class SingleFileToDoNode extends BaseToDoNode<PsiFile> {
   private final TodoFileNode myFileNode;
 
-  public SingleFileToDoNode(Project project, @NotNull PsiFile value, TodoTreeBuilder builder) {
+  public SingleFileToDoNode(Project project, @NotNull PsiFile value,
+                            TodoTreeBuilder builder) {
     super(project, value, builder);
     myFileNode = new TodoFileNode(getProject(), value, myBuilder, true);
   }
@@ -29,8 +30,7 @@ public final class SingleFileToDoNode extends BaseToDoNode<PsiFile> {
   }
 
   @Override
-  public void update(@NotNull PresentationData presentation) {
-  }
+  public void update(@NotNull PresentationData presentation) {}
 
   @Override
   public boolean canRepresent(Object element) {
@@ -45,9 +45,7 @@ public final class SingleFileToDoNode extends BaseToDoNode<PsiFile> {
     return super.canRepresent(element);
   }
 
-  public Object getFileNode() {
-    return myFileNode;
-  }
+  public Object getFileNode() { return myFileNode; }
 
   @Override
   public int getFileCount(final PsiFile val) {

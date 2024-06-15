@@ -1,5 +1,5 @@
-// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by
-// the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source
+// code is governed by the Apache 2.0 license.
 
 package co.anbora.labs.todo.nodes;
 
@@ -8,12 +8,10 @@ import co.anbora.labs.todo.TodoTreeBuilder;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Queryable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ToDoRootNode extends BaseToDoNode<Object> {
   private final SummaryNode mySummaryNode;
@@ -40,8 +38,7 @@ public class ToDoRootNode extends BaseToDoNode<Object> {
   public Object getSummaryNode() { return mySummaryNode; }
 
   @Override
-  public @Nullable String toTestString(Queryable.
-                                       @Nullable PrintInfo printInfo) {
+  public String getTestPresentation() {
     return "Root";
   }
 

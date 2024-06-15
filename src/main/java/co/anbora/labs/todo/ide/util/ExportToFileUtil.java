@@ -2,9 +2,12 @@
 // the Apache 2.0 license that can be found in the LICENSE file.
 package co.anbora.labs.todo.ide.util;
 
+import co.anbora.labs.todo.notifications.LinterNotifications;
 import com.intellij.CommonBundle;
 import com.intellij.ide.ExporterToTextFile;
 import com.intellij.ide.IdeBundle;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -58,6 +61,11 @@ public final class ExportToFileUtil {
 
     exportTextToFile(project, dlg.getFileName(), dlg.getText());
     exporter.exportedTo(dlg.getFileName());
+
+    Notification notification = LinterNotifications.createNotification(
+        "TODO Exporter", "Exported todos in file",
+        NotificationType.INFORMATION);
+    LinterNotifications.showNotification(notification, project);
   }
 
   private static void exportTextToFile(Project project, String fileName,

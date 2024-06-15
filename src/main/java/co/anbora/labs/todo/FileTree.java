@@ -2,15 +2,23 @@
 // the Apache 2.0 license that can be found in the LICENSE file.
 package co.anbora.labs.todo;
 
+import com.intellij.concurrency.ConcurrentCollectionFactory;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.util.registry.RegistryManager;
+import com.intellij.openapi.util.registry.RegistryValue;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.containers.ContainerUtil;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import org.jetbrains.annotations.NotNull;
 
 final class FileTree {
+
   private static final Logger LOG = Logger.getInstance(FileTree.class);
+  private static final @NotNull RegistryValue ASSERT_THREADS =
+      RegistryManager.getInstance().get("ide.tree.ui.assert.threads");
 
   private final Map<VirtualFile, List<VirtualFile>> myDirectory2Children;
   private final Set<VirtualFile> myFiles;
@@ -18,18 +26,22 @@ final class FileTree {
 
   FileTree() {
     myDirectory2Children = new ConcurrentHashMap<>();
-    myFiles = ContainerUtil.newConcurrentSet();
+    myFiles = ConcurrentCollectionFactory.createConcurrentSet();
     myStrictDirectory2Children = new ConcurrentHashMap<>();
   }
 
-  void add(VirtualFile file) {
+  int size() { return myFiles.size(); }
+
+  void add(@NotNull VirtualFile file) {
+    assertThreadIfNeeded();
+
     if (myFiles.contains(file)) {
       return;
     }
 
     VirtualFile dir = file.getParent();
     if (dir == null) {
-      LOG.error(String.valueOf(file));
+      LOG.error("Parent is null for " + file);
       return;
     }
 
@@ -74,21 +86,23 @@ final class FileTree {
     }
   }
 
-  boolean isDirectoryEmpty(VirtualFile dir) {
-    final List<VirtualFile> files = myStrictDirectory2Children.get(dir);
-    return files == null || files.isEmpty();
+  boolean isDirectoryEmpty(@NotNull VirtualFile dir) {
+    assertThreadIfNeeded();
+
+    return myStrictDirectory2Children.getOrDefault(dir, List.of()).isEmpty();
   }
 
-  List<VirtualFile> getFilesUnderDirectory(VirtualFile dir) {
-    List<VirtualFile> filesList = new ArrayList<>();
+  @NotNull
+  List<VirtualFile> getFilesUnderDirectory(@NotNull VirtualFile dir) {
+    assertThreadIfNeeded();
+
     List<VirtualFile> files = myStrictDirectory2Children.get(dir);
-    if (files != null) {
-      filesList.addAll(files);
-    }
-    return filesList;
+    return files != null ? List.copyOf(files) : List.of();
   }
 
-  void removeFile(VirtualFile file) {
+  void removeFile(@NotNull VirtualFile file) {
+    assertThreadIfNeeded();
+
     if (!myFiles.contains(file)) {
       return;
     }
@@ -120,7 +134,7 @@ final class FileTree {
    * directory should be empty, otherwise the method shows
    * java.lang.IllegalArgumentException
    */
-  private void removeDir(VirtualFile psiDirectory) {
+  private void removeDir(@NotNull VirtualFile psiDirectory) {
     if (!myDirectory2Children.containsKey(psiDirectory)) {
       throw new IllegalArgumentException("directory is not in the tree: " +
                                          psiDirectory);
@@ -151,12 +165,10 @@ final class FileTree {
     }
   }
 
-  private static List<VirtualFile>
-  collectDirsToRemove(VirtualFile psiDirectory, List<VirtualFile> children,
-                      List<VirtualFile> dirsToBeRemoved,
-                      VirtualFile _directory) {
-    if (children.contains(psiDirectory)) {
-      children.remove(psiDirectory);
+  private static List<VirtualFile> collectDirsToRemove(
+      @NotNull VirtualFile psiDirectory, @NotNull List<VirtualFile> children,
+      List<VirtualFile> dirsToBeRemoved, @NotNull VirtualFile _directory) {
+    if (children.remove(psiDirectory)) {
       if (children.size() == 0) {
         if (dirsToBeRemoved == null) {
           dirsToBeRemoved = new ArrayList<>(2);
@@ -167,9 +179,11 @@ final class FileTree {
     return dirsToBeRemoved;
   }
 
-  boolean contains(VirtualFile file) { return myFiles.contains(file); }
+  boolean contains(@NotNull VirtualFile file) { return myFiles.contains(file); }
 
   void clear() {
+    assertThreadIfNeeded();
+
     myStrictDirectory2Children.clear();
     myDirectory2Children.clear();
     myFiles.clear();
@@ -178,33 +192,47 @@ final class FileTree {
   /**
    * @return iterator of all files.
    */
-  Iterator<VirtualFile> getFileIterator() { return myFiles.iterator(); }
+  @NotNull
+  Iterator<VirtualFile> getFileIterator() {
+    assertThreadIfNeeded();
+
+    return myFiles.iterator();
+  }
 
   /**
    * @return all files (in depth) located under specified {@code psiDirectory}.
-   *         Please note that returned files can be invalid.
+   * Please note that returned files can be invalid.
    */
-  List<VirtualFile> getFiles(VirtualFile dir) {
+  @NotNull
+  List<VirtualFile> getFiles(@NotNull VirtualFile dir) {
+    assertThreadIfNeeded();
+    ApplicationManager.getApplication().assertReadAccessAllowed();
+
     List<VirtualFile> filesList = new ArrayList<>();
     collectFiles(dir, filesList);
-    return filesList;
+    return Collections.unmodifiableList(filesList);
   }
 
-  private void collectFiles(VirtualFile dir,
-                            List<? super VirtualFile> filesList) {
-    List<VirtualFile> children = myDirectory2Children.get(dir);
-    if (children != null) {
-      for (VirtualFile child : children) {
-        ProgressManager.checkCanceled();
-        if (!child.isDirectory()) {
-          if (LOG.isDebugEnabled()) {
-            LOG.assertTrue(!filesList.contains(child));
-          }
-          filesList.add(child);
-        } else {
-          collectFiles(child, filesList);
+  private void collectFiles(@NotNull VirtualFile dir,
+                            @NotNull List<? super VirtualFile> filesList) {
+    for (VirtualFile child :
+         myDirectory2Children.getOrDefault(dir, Collections.emptyList())) {
+      ProgressManager.checkCanceled();
+
+      if (!child.isDirectory()) {
+        if (LOG.isDebugEnabled()) {
+          LOG.assertTrue(!filesList.contains(child));
         }
+        filesList.add(child);
+      } else {
+        collectFiles(child, filesList);
       }
+    }
+  }
+
+  static void assertThreadIfNeeded() {
+    if (ASSERT_THREADS.asBoolean()) {
+      ApplicationManager.getApplication().assertIsNonDispatchThread();
     }
   }
 }

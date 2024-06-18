@@ -13,18 +13,27 @@ import com.intellij.ide.todo.TodoFilter;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.injected.editor.DocumentWindow;
 import com.intellij.lang.injection.InjectedLanguageManager;
-import com.intellij.notebook.editor.BackFileViewProvider;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiLanguageInjectionHost;
+import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
 import com.intellij.psi.impl.search.TodoItemImpl;
 import com.intellij.psi.search.PsiTodoSearchHelper;
 import com.intellij.psi.search.TodoItem;
 import com.intellij.util.containers.ContainerUtil;
-import java.util.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 public final class TodoFileNode extends PsiFileNode {
   private final TodoTreeBuilder myBuilder;
@@ -42,16 +51,6 @@ public final class TodoFileNode extends PsiFileNode {
     try {
       PsiFile psiFile = getValue();
       assert psiFile != null;
-
-      FileViewProvider viewProvider = psiFile.getViewProvider();
-      // noinspection deprecation
-      if (viewProvider instanceof BackFileViewProvider) {
-        // noinspection deprecation
-        psiFile = ((BackFileViewProvider)viewProvider).getFrontPsiFile();
-        if (psiFile == null) {
-          return List.of();
-        }
-      }
 
       List<? extends TodoItem> items = findAllTodos(
           psiFile, myBuilder.getTodoTreeStructure().getSearchHelper());

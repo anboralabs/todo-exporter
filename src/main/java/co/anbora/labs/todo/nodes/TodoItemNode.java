@@ -6,6 +6,7 @@ package co.anbora.labs.todo.nodes;
 import co.anbora.labs.todo.HighlightedRegionProvider;
 import co.anbora.labs.todo.SmartTodoItemPointer;
 import co.anbora.labs.todo.TodoTreeBuilder;
+import co.anbora.labs.todo.icons.TodoExporterIcons;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.diagnostic.Logger;
@@ -139,9 +140,7 @@ public class TodoItemNode extends BaseToDoNode<SmartTodoItemPointer>
     // Update icon
 
     TodoPattern pattern = todoItem.getPattern();
-    Icon newIcon = pattern != null ? pattern.getAttributes().getIcon()
-                                   : IconManager.getInstance().getPlatformIcon(
-                                         PlatformIcons.TodoDefault);
+    Icon newIcon = TodoExporterIcons.TODO_16;
 
     // Update highlighted regions
 

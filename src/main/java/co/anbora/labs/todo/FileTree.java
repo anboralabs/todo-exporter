@@ -9,6 +9,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.registry.RegistryManager;
 import com.intellij.openapi.util.registry.RegistryValue;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.concurrency.ThreadingAssertions;
 import com.intellij.util.containers.ContainerUtil;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -232,7 +233,7 @@ final class FileTree {
 
   static void assertThreadIfNeeded() {
     if (ASSERT_THREADS.asBoolean()) {
-      ApplicationManager.getApplication().assertIsNonDispatchThread();
+      ThreadingAssertions.assertBackgroundThread();
     }
   }
 }

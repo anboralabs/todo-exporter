@@ -35,6 +35,7 @@ import com.intellij.ui.components.JBLoadingPanel;
 import com.intellij.ui.tree.StructureTreeModel;
 import com.intellij.usageView.UsageTreeColorsScheme;
 import com.intellij.util.SmartList;
+import com.intellij.util.concurrency.ThreadingAssertions;
 import com.intellij.util.concurrency.annotations.RequiresBackgroundThread;
 import com.intellij.util.concurrency.annotations.RequiresEdt;
 import com.intellij.util.containers.ContainerUtil;
@@ -332,7 +333,7 @@ public abstract class TodoTreeBuilder implements Disposable {
    * It means that file is in "dirty" file set or in "current" file set.
    */
   private boolean canContainTodoItems(PsiFile psiFile) {
-    ApplicationManager.getApplication().assertWriteIntentLockAcquired();
+    ThreadingAssertions.assertWriteIntentReadAccess();
     VirtualFile vFile = psiFile.getVirtualFile();
     return myFileTree.contains(vFile) || myDirtyFileSet.contains(vFile);
   }

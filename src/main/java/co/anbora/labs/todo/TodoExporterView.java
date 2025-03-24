@@ -156,7 +156,8 @@ public class TodoExporterView
           setPopup(true);
           add(myAllTodos.createAutoScrollToSourceAction());
           addSeparator();
-          addAll(myAllTodos.createGroupByActionGroup());
+          DefaultActionGroup[] actionGroups = {myAllTodos.createGroupByActionGroup()};
+          addAll(actionGroups);
         }
       };
       toolWindow.setAdditionalGearActions(group);

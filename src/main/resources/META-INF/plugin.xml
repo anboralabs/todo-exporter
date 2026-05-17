@@ -5,7 +5,9 @@
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
-    <depends>com.intellij.modules.platform</depends>
+    <dependencies>
+        <module name="intellij.platform.todo"/>
+    </dependencies>
 
     <extensions defaultExtensionNs="com.intellij">
         <projectService serviceImplementation="co.anbora.labs.todo.TodoExporterView"/>

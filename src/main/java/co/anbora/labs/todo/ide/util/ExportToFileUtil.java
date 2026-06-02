@@ -2,10 +2,10 @@
 // the Apache 2.0 license that can be found in the LICENSE file.
 package co.anbora.labs.todo.ide.util;
 
+import co.anbora.labs.todo.ide.IdeBundle;
 import co.anbora.labs.todo.notifications.LinterNotifications;
 import com.intellij.CommonBundle;
 import com.intellij.ide.ExporterToTextFile;
-import com.intellij.ide.IdeBundle;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.components.PathMacroManager;

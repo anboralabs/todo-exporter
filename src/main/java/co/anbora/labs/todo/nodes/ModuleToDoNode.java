@@ -5,7 +5,7 @@ package co.anbora.labs.todo.nodes;
 
 import co.anbora.labs.todo.TodoTreeBuilder;
 import co.anbora.labs.todo.TodoTreeStructure;
-import com.intellij.ide.IdeBundle;
+import co.anbora.labs.todo.ide.IdeBundle;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.application.ReadAction;

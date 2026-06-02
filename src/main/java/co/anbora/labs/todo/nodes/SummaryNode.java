@@ -7,7 +7,7 @@ import co.anbora.labs.todo.CurrentFileTodosTreeBuilder;
 import co.anbora.labs.todo.ToDoSummary;
 import co.anbora.labs.todo.TodoFileDirAndModuleComparator;
 import co.anbora.labs.todo.TodoTreeBuilder;
-import com.intellij.ide.IdeBundle;
+import co.anbora.labs.todo.ide.IdeBundle;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.application.ReadAction;

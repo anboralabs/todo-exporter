@@ -2,7 +2,7 @@
 // code is governed by the Apache 2.0 license.
 package co.anbora.labs.todo;
 
-import com.intellij.ide.IdeBundle;
+import co.anbora.labs.todo.ide.IdeBundle;
 import com.intellij.ide.todo.HighlightedRegionProvider;
 import com.intellij.ide.todo.nodes.TodoItemNode;
 import com.intellij.ui.HighlightableCellRenderer;

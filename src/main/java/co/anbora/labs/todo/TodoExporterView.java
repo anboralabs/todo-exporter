@@ -2,10 +2,10 @@
 // code is governed by the Apache 2.0 license.
 package co.anbora.labs.todo;
 
-import com.intellij.ide.IdeBundle;
+import co.anbora.labs.todo.ide.IdeBundle;
+import co.anbora.labs.todo.ide.LangBundle;
 import com.intellij.ide.todo.TodoConfiguration;
 import com.intellij.ide.todo.TodoPanelSettings;
-import com.intellij.lang.LangBundle;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.components.PersistentStateComponent;

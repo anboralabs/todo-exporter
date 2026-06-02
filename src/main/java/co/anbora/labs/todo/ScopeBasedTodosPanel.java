@@ -3,7 +3,7 @@
 
 package co.anbora.labs.todo;
 
-import com.intellij.ide.IdeBundle;
+import co.anbora.labs.todo.ide.IdeBundle;
 import com.intellij.ide.todo.TodoPanelSettings;
 import com.intellij.ide.util.scopeChooser.ScopeChooserCombo;
 import com.intellij.openapi.project.Project;

@@ -2,11 +2,15 @@
 // code is governed by the Apache 2.0 license.
 package co.anbora.labs.todo;
 
+import co.anbora.labs.todo.ide.IdeBundle;
 import co.anbora.labs.todo.nodes.TodoItemNode;
 import com.intellij.find.FindModel;
 import com.intellij.find.impl.FindInProjectUtil;
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.*;
+import com.intellij.ide.CommonActionsManager;
+import com.intellij.ide.DefaultTreeExpander;
+import com.intellij.ide.OccurenceNavigator;
+import com.intellij.ide.TreeExpander;
 import com.intellij.ide.actions.NextOccurenceToolbarAction;
 import com.intellij.ide.actions.PreviousOccurenceToolbarAction;
 import com.intellij.ide.todo.TodoConfiguration;

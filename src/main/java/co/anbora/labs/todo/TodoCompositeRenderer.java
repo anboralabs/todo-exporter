@@ -2,10 +2,10 @@
 // the Apache 2.0 license that can be found in the LICENSE file.
 package co.anbora.labs.todo;
 
-import com.intellij.ide.todo.HighlightedRegionProvider;
-import com.intellij.ide.todo.MultiLineTodoRenderer;
-import com.intellij.ide.todo.nodes.SummaryNode;
-import com.intellij.ide.todo.nodes.TodoItemNode;
+import co.anbora.labs.todo.HighlightedRegionProvider;
+import co.anbora.labs.todo.MultiLineTodoRenderer;
+import co.anbora.labs.todo.nodes.SummaryNode;
+import co.anbora.labs.todo.nodes.TodoItemNode;
 import com.intellij.ide.util.treeView.NodeDescriptor;
 import com.intellij.ide.util.treeView.NodeRenderer;
 import com.intellij.ui.HighlightableCellRenderer;
@@ -22,7 +22,7 @@ import javax.swing.tree.TreeCellRenderer;
 final class TodoCompositeRenderer implements TreeCellRenderer {
   private final NodeRenderer myNodeRenderer;
   private final HighlightableCellRenderer myColorTreeCellRenderer;
-  private final com.intellij.ide.todo.MultiLineTodoRenderer myMultiLineRenderer;
+  private final MultiLineTodoRenderer myMultiLineRenderer;
 
   TodoCompositeRenderer() {
     myNodeRenderer = new NodeRenderer();

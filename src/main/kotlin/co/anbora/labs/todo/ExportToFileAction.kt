@@ -40,7 +40,7 @@ class ExportToFileAction(
                 ReadAction.nonBlocking<String> {
                     mySearchHelper.processFilesWithTodoItems {
                         toPrint += mySearchHelper.findTodoItems(it).asIterable()
-                            .joinToString(separator = "\n") { todoItem: TodoItem ->
+                            .joinToString(separator = System.lineSeparator()) { todoItem: TodoItem ->
                                 val document = PsiDocumentManager.getInstance(currentProject).getDocument(todoItem.file)
                                 val pointer = SmartTodoItemPointer(todoItem, document!!)
                                 TodoExportItemNode(currentProject, pointer, supplierBuilder.get()).toString()

@@ -15,7 +15,6 @@
  */
 package co.anbora.labs.todo;
 
-import com.intellij.ide.todo.TodoTreeBuilder;
 import com.intellij.openapi.project.Project;
 import javax.swing.*;
 

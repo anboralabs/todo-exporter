@@ -3,10 +3,10 @@
 package co.anbora.labs.todo;
 
 import com.intellij.ide.projectView.ProjectViewNode;
-import com.intellij.ide.todo.nodes.BaseToDoNode;
-import com.intellij.ide.todo.nodes.SummaryNode;
-import com.intellij.ide.todo.nodes.ToDoRootNode;
-import com.intellij.ide.todo.nodes.TodoTreeHelper;
+import co.anbora.labs.todo.nodes.BaseToDoNode;
+import co.anbora.labs.todo.nodes.SummaryNode;
+import co.anbora.labs.todo.nodes.ToDoRootNode;
+import co.anbora.labs.todo.nodes.TodoTreeHelper;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.tree.AbstractTreeNodeVisitor;

@@ -3,8 +3,8 @@
 package co.anbora.labs.todo;
 
 import co.anbora.labs.todo.ide.IdeBundle;
-import com.intellij.ide.todo.HighlightedRegionProvider;
-import com.intellij.ide.todo.nodes.TodoItemNode;
+import co.anbora.labs.todo.HighlightedRegionProvider;
+import co.anbora.labs.todo.nodes.TodoItemNode;
 import com.intellij.ui.HighlightableCellRenderer;
 import com.intellij.ui.HighlightedRegion;
 import java.awt.*;
@@ -54,7 +54,7 @@ public final class MultiLineTodoRenderer
         hasFocus);
     myPrefixRenderer.setIcon(node.getIcon());
 
-    List<com.intellij.ide.todo.HighlightedRegionProvider> additionalLines =
+    List<HighlightedRegionProvider> additionalLines =
         node.getAdditionalLines();
     for (int i = 0; i < MAX_DISPLAYED_LINES; i++) {
       if (i > additionalLines.size()) {

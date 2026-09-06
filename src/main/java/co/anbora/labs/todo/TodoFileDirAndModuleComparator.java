@@ -4,7 +4,7 @@
 package co.anbora.labs.todo;
 
 import com.intellij.ide.projectView.ProjectViewNode;
-import com.intellij.ide.todo.nodes.ModuleToDoNode;
+import co.anbora.labs.todo.nodes.ModuleToDoNode;
 import com.intellij.ide.util.treeView.NodeDescriptor;
 import java.util.Comparator;
 

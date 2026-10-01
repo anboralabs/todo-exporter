@@ -5,7 +5,9 @@ package co.anbora.labs.todo;
 import co.anbora.labs.todo.ide.IdeBundle;
 import co.anbora.labs.todo.ide.LangBundle;
 import com.intellij.ide.todo.TodoConfiguration;
+import com.intellij.ide.todo.TodoConfigurationPropertyChangeListener;
 import com.intellij.ide.todo.TodoPanelSettings;
+import com.intellij.ide.todo.TodoView;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -74,8 +76,7 @@ public class TodoExporterView
     state.current.isAutoScrollToSource = true;
 
     MessageBusConnection connection = project.getMessageBus().connect(this);
-    connection.subscribe(TodoConfiguration.PROPERTY_CHANGE,
-                         new MyPropertyChangeListener());
+    connection.subscribe(TodoConfigurationPropertyChangeListener.TOPIC, new MyPropertyChangeListener());
     connection.subscribe(FileTypeManager.TOPIC, new MyFileTypeListener());
 
     myChangesSupport = project.getService(TodoViewChangesSupport.class);
@@ -242,7 +243,7 @@ public class TodoExporterView
   }
 
   private final class MyPropertyChangeListener
-      implements PropertyChangeListener {
+      implements TodoConfigurationPropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent e) {
       if (TodoConfiguration.PROP_TODO_PATTERNS.equals(e.getPropertyName()) ||

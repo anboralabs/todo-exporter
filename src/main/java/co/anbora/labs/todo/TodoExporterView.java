@@ -5,7 +5,7 @@ package co.anbora.labs.todo;
 import co.anbora.labs.todo.ide.IdeBundle;
 import co.anbora.labs.todo.ide.LangBundle;
 import com.intellij.ide.todo.TodoConfiguration;
-import com.intellij.ide.todo.TodoConfigurationPropertyChangeListener;
+// import com.intellij.ide.todo.TodoConfigurationPropertyChangeListener;
 import com.intellij.ide.todo.TodoPanelSettings;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
@@ -74,7 +74,7 @@ public class TodoExporterView
     state.current.isAutoScrollToSource = true;
 
     MessageBusConnection connection = project.getMessageBus().connect(this);
-    connection.subscribe(TodoConfigurationPropertyChangeListener.TOPIC, new MyPropertyChangeListener());
+    // connection.subscribe(TodoConfigurationPropertyChangeListener.TOPIC, new MyPropertyChangeListener());
     connection.subscribe(FileTypeManager.TOPIC, new MyFileTypeListener());
 
     myChangesSupport = project.getService(TodoViewChangesSupport.class);
@@ -240,7 +240,7 @@ public class TodoExporterView
     return new AllTodosTreeBuilder(tree, project);
   }
 
-  private final class MyPropertyChangeListener
+  /*private final class MyPropertyChangeListener
       implements TodoConfigurationPropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent e) {
@@ -258,7 +258,7 @@ public class TodoExporterView
       } catch (ProcessCanceledException ignore) {
       }
     }
-  }
+  }*/
 
   private static final class MyFileTypeListener implements FileTypeListener {}
 
